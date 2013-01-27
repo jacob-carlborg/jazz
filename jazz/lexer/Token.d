@@ -17,13 +17,13 @@ struct Token
 	enum Token invalid = Token(TokenKind.invalid);
 
 	/// The kind of token.
-	immutable TokenKind kind;
+	TokenKind kind;
 
 	/// The textual representation of this token in the original source.
-	immutable string lexeme;
+	string lexeme;
 
 	/// The index of where this token begins in the original source.
-	immutable uint index;
+	uint index;
 
 	this (TokenKind kind, string lexeme = null, uint index = 0)
 	{
