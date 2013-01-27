@@ -1,0 +1,7 @@
+*.deps
+*.a
+*.o
+*.dylib
+*.dll
+*.so
+main
