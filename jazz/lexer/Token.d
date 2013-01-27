@@ -6,12 +6,17 @@
  */
 module jazz.lexer.Token;
 
+import mambo.core._;
+
 import jazz.lexer.TokenKind;
 
 ///
 struct Token
 {
-	/// The kind of token
+	/// Returns an invalid token.
+	enum Token invalid = Token(TokenKind.invalid);
+
+	/// The kind of token.
 	immutable TokenKind kind;
 
 	/// The textual representation of this token in the original source.
@@ -25,5 +30,10 @@ struct Token
 		this.kind = kind;
 		this.lexeme = lexeme;
 		this.index = index;
+	}
+
+	bool isValid ()
+	{
+		return this != Token.invalid;
 	}
 }
