@@ -7,5 +7,6 @@ import jazz.lexer.Lexer;
 void main ()
 {
 	auto lexer = new Lexer;
-	println("ok");
+	auto token = lexer.scan();
+	println(token);
 }

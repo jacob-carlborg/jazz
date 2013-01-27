@@ -6,7 +6,18 @@
  */
 module jazz.lexer.Lexer;
 
+import jazz.lexer.Token;
+import jazz.lexer.TokenKind;
+
 class Lexer
 {
+	private
+	{
+		Token currentToken;
+	}
 
+	Token scan ()
+	{
+		return Token(TokenKind.invalid);
+	}
 }

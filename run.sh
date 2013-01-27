@@ -3,5 +3,5 @@
 ./build.sh
 
 if [ "$?" = 0 ] ; then
-  ./bin/dstep "$@"
+  ./bin/main "$@"
 fi
