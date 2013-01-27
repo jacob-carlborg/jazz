@@ -7,7 +7,7 @@ import jazz.lexer.TokenKind;
 
 void main ()
 {
-	string code = "module main;";
+	string code = "module foöbar;";
 
 	auto lexer = new Lexer(code);
 	auto token = lexer.scan();

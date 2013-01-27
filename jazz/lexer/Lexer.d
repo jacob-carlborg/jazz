@@ -6,6 +6,8 @@
  */
 module jazz.lexer.Lexer;
 
+import std.utf : codeLength;
+
 import tango.text.Unicode;
 
 import mambo.core._;
@@ -69,7 +71,7 @@ private:
 
 	Token scanIdentifier ()
 	{
-		size_t pos = bufferPosition;
+		auto pos = bufferPosition;
 
 		do
 		{
@@ -80,7 +82,7 @@ private:
 		auto lexeme = buffer[pos .. bufferPosition];
 		auto kind = isKeyword(lexeme) ? TokenKind.keyword : TokenKind.identifier;
 
-		return Token(kind, lexeme, bufferPosition);
+		return Token(kind, lexeme, pos);
 	}
 
 	void skipWhitespace ()
@@ -125,7 +127,9 @@ private:
 	void readCharacter ()
 	{
 		bufferPosition = peekPosition;
-		peek = buffer[peekPosition++];
+		peek = buffer[peekPosition];
+		peekPosition += peek.codeLength!(char);
+
 		column++;
 	}
 
