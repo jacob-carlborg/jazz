@@ -47,6 +47,8 @@ class Lexer
 			case TokenKind.identifier: return scanIdentifier();
 			default: return token;
 		}
+
+		return token;
 	}
 
 	string code ()
@@ -81,15 +83,17 @@ private:
 	}
 
 	Token scanIdentifier ()
+	in
+	{
+		assert(current.isLetterOrDigit, "The current token is not the start of an identifier");
+	}
+	body
 	{
 		auto pos = bufferPosition;
 
-		do
-		{
+		while (current.isLetterOrDigit)
 			foreach (_ ; 0 .. current.codeLength!(char))
 				advance();
-		} while (current.isLetterOrDigit || current == '_');
-
 
 		auto lexeme = buffer[pos .. bufferPosition];
 		auto kind = isKeyword(lexeme) ? TokenKind.keyword : TokenKind.identifier;
@@ -299,4 +303,9 @@ private:
 	 		default: return false;
 		}
 	}
+}
+
+@property private bool isLetterOrDigit (dchar c)
+{
+	return tango.text.Unicode.isLetterOrDigit(c) || c == '_';
 }
