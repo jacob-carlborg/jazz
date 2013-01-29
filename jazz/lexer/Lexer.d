@@ -12,27 +12,29 @@ import tango.text.Unicode;
 
 import mambo.core._;
 
-import jazz.lexer.Token;
-import jazz.lexer.TokenKind;
+import jazz.lexer._;
 
 class Lexer
 {
 	private
 	{
 		immutable string buffer;
-		dchar peek;
-
-		uint bufferPosition;
-		uint peekPosition;
+		dchar current = ' ';
+		uint bufferPosition = uint.max;
 
 		size_t column;
 		size_t line;
 	}
 
+	// invariant ()
+	// {
+	// 	assert(bufferPosition < buffer.length, "Buffer position is out of bounds");
+	// }
+
 	this (string code)
 	{
 		buffer = code;
-		buffer ~= '\u0000';
+		buffer ~= Entity.null_;
 	}
 
 	Token scan ()
@@ -57,7 +59,7 @@ private:
 	{
 		skipWhitespace();
 
-		if (peek.isLetter)
+		if (current.isLetter)
 			return newToken(TokenKind.identifier);
 
 		else
@@ -75,8 +77,9 @@ private:
 
 		do
 		{
-			readCharacter();
-		} while (peek.isLetterOrDigit || peek == '_');
+			foreach (_ ; 0 .. current.codeLength!(char))
+				advance();
+		} while (current.isLetterOrDigit || current == '_');
 
 
 		auto lexeme = buffer[pos .. bufferPosition];
@@ -89,33 +92,29 @@ private:
 	{
 		while (true)
 		{
-			readCharacter();
+			advance();
 			skipNewline();
 
-			if (!isWhitespace(peek))
+			if (!isWhitespace(current))
 				break;
 		}
 	}
 
 	void skipNewline ()
 	{
-		switch (peek)
+		switch (current)
 		{
-			case '\r':
-			case '\u2028':
-			case '\u2029':
-				line++;
-				column = 1;
+			case Entity.lineFeed:
+			case Entity.lineSeparator:
+			case Entity.paragraphSeparator:
+				newline();
 			return;
 
-			case '\n':
-				readCharacter();
+			case Entity.carriageReturn:
+				if (peekMatches(Entity.lineFeed))
+					advance();
 
-				if (!readCharacter('\r'))
-					bufferPosition--;
-
-				line++;
-				column = 1;
+				newline();
 			break;
 
 			default:
@@ -124,19 +123,37 @@ private:
 		}
 	}
 
-	void readCharacter ()
+	void newline ()
 	{
-		bufferPosition = peekPosition;
-		peek = buffer[peekPosition];
-		peekPosition += peek.codeLength!(char);
+		line++;
+		column = 1;
+	}
 
+	void advance ()
+	{
+		current = buffer[++bufferPosition];
 		column++;
 	}
 
-	bool readCharacter (dchar c)
+	bool advance (dchar c)
 	{
-		readCharacter();
-		return peek == c;
+		advance();
+		return current == c;
+	}
+
+	dchar peek (size_t positions = 1)
+	in
+	{
+		assert(bufferPosition + positions < buffer.length, "Buffer position is out of bounds");
+	}
+	body
+	{
+		return buffer[bufferPosition + positions];
+	}
+
+	bool peekMatches (dchar c, size_t positions = 1)
+	{
+		return peek(positions) == c;
 	}
 
 	bool isKeyword (string lexeme)
