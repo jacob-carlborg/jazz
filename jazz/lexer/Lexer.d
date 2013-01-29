@@ -101,17 +101,17 @@ private:
 	{
 		switch (peek)
 		{
-			case '\u000A':
+			case '\r':
 			case '\u2028':
 			case '\u2029':
 				line++;
 				column = 1;
 			return;
 
-			case '\u000D':
+			case '\n':
 				readCharacter();
 
-				if (!readCharacter('\u000A'))
+				if (!readCharacter('\r'))
 					bufferPosition--;
 
 				line++;
