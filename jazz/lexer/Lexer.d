@@ -26,10 +26,11 @@ class Lexer
 		size_t line;
 	}
 
-	// invariant ()
-	// {
-	// 	assert(bufferPosition < buffer.length, "Buffer position is out of bounds");
-	// }
+	invariant ()
+	{
+		if (bufferPosition < bufferPosition.max)
+			assert(bufferPosition < buffer.length, "Buffer position is out of bounds");
+	}
 
 	this (string code)
 	{
