@@ -2,19 +2,22 @@ module main;
 
 import mambo.core._;
 
-import jazz.lexer.Lexer;
-import jazz.lexer.TokenKind;
+import jazz.lexer._;
+
+bool stop (TokenKind kind)
+{
+	return kind == TokenKind.invalid || kind == TokenKind.eof;
+}
 
 void main ()
 {
 	string code = "module foöbar;";
 
 	auto lexer = new Lexer(code);
-	auto token = lexer.scan();
+	Token token;
 
-	while (token.kind != TokenKind.invalid)
-	{
-		println(token);
+	do {
 		token = lexer.scan();
-	}
+		println(token);
+	} while (!stop(token.kind));
 }

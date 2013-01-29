@@ -45,7 +45,7 @@ class Lexer
 		switch (token.kind)
 		{
 			case TokenKind.identifier: return scanIdentifier();
-			default: return Token.invalid;
+			default: return token;
 		}
 	}
 
@@ -64,7 +64,15 @@ private:
 			return newToken(TokenKind.identifier);
 
 		else
-			return Token.invalid;
+		{
+			switch (current)
+			{
+				case Entity.null_, Entity.substitute:
+					return newToken(TokenKind.eof);
+
+				default: return Token.invalid;
+			}
+		}
 	}
 
 	Token newToken (TokenKind kind, string lexeme = null)
