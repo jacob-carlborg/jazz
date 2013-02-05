@@ -20,6 +20,7 @@ class Lexer
 	{
 		immutable string buffer;
 		dchar current = ' ';
+		Token currentToken;
 		uint bufferPosition = uint.max;
 
 		size_t column;
@@ -40,15 +41,16 @@ class Lexer
 
 	Token scan ()
 	{
-		auto token = nextToken();
+		currentToken = nextToken();
 
-		switch (token.kind)
+		switch (currentToken.kind)
 		{
 			case TokenKind.identifier: return scanIdentifier();
-			default: return token;
+			case TokenKind.stringLiteral: return scanStringLiteral();
+			default: return currentToken;
 		}
 
-		return token;
+		return currentToken;
 	}
 
 	string code ()
@@ -69,6 +71,9 @@ private:
 		{
 			switch (current)
 			{
+				case '"':
+					return newToken(TokenKind.stringLiteral);
+
 				case Entity.null_, Entity.substitute:
 					return newToken(TokenKind.eof);
 
@@ -111,6 +116,31 @@ private:
 			if (!isWhitespace(current))
 				break;
 		}
+	}
+
+	Token scanStringLiteral ()
+	in
+	{
+		assert(currentToken.kind == TokenKind.stringLiteral);
+	}
+	body
+	{
+		advance();
+
+		bool escapedQute;
+		auto pos = bufferPosition;
+
+		while (current != '"' && !escapedQute)
+		{
+			escapedQute = false;
+			advance();
+
+			if (current == '\\' && peekMatches('"'))
+				escapedQute = true;
+		}
+
+		auto lexeme = buffer[pos .. bufferPosition];
+		return Token(currentToken.kind, lexeme, pos);
 	}
 
 	void skipNewline ()
