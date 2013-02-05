@@ -148,12 +148,6 @@ private:
 		column++;
 	}
 
-	bool advance (dchar c)
-	{
-		advance();
-		return current == c;
-	}
-
 	dchar peek (size_t positions = 1)
 	in
 	{
