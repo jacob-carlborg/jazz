@@ -97,8 +97,7 @@ private:
 		auto pos = bufferPosition;
 
 		while (current.isLetterOrDigit)
-			foreach (_ ; 0 .. current.codeLength!(char))
-				advance();
+			advance(current.codeLength!(char));
 
 		auto lexeme = buffer[pos .. bufferPosition];
 		auto kind = isKeyword(lexeme) ? TokenKind.keyword : TokenKind.identifier;
@@ -172,9 +171,10 @@ private:
 		column = 1;
 	}
 
-	void advance ()
+	void advance (size_t positions = 1)
 	{
-		current = buffer[++bufferPosition];
+		bufferPosition += positions;
+		current = buffer[bufferPosition];
 		column++;
 	}
 
