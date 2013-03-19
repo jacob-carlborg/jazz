@@ -17,22 +17,36 @@ unittest
 {
 
 describe! "Lexer" in {
-	describe! "scanIdentifier" in {
-		describe! "valid string literal" in {
-			it! "should return a token with the type TokenKind.stringLiteral" in {
-				auto code = `"asd"`;
-				auto lexer = new Lexer(code);
+	describe! "valid string literal" in {
+		it! "should return a token with the type TokenKind.stringLiteral" in {
+			auto code = `"asd"`;
+			auto lexer = new Lexer(code);
 
-				assert(lexer.scan.kind == TokenKind.stringLiteral);
-			};
+			assert(lexer.scan.kind == TokenKind.stringLiteral);
+		};
 
-			it! "should return a token with the correct lexeme" in {
-				auto stringLiteral = "asd";
-				auto code = `"` ~ stringLiteral ~ `"`;
-				auto lexer = new Lexer(code);
+		it! "should return a token with the correct lexeme" in {
+			auto stringLiteral = "asd";
+			auto code = `"` ~ stringLiteral ~ `"`;
+			auto lexer = new Lexer(code);
 
-				assert(lexer.scan.lexeme == stringLiteral);
-			};
+			assert(lexer.scan.lexeme == stringLiteral);
+		};
+	};
+
+	describe! "valid identifier" in {
+		it! "should return a token with the type TokenKind.identifier" in {
+			auto code = `foo`;
+			auto lexer = new Lexer(code);
+
+			assert(lexer.scan.kind == TokenKind.identifier);
+		};
+
+		it! "should return a token with the correct lexeme" in {
+			auto code = "foo";
+			auto lexer = new Lexer(code);
+
+			assert(lexer.scan.lexeme == code);
 		};
 	};
 };
