@@ -29,7 +29,12 @@ class Lexer
 		{
 			case TokenKind.identifier: return scanIdentifier();
 			case TokenKind.stringLiteral: return scanStringLiteral();
-			default: return currentToken;
+
+			default:
+				if (currentToken.lexeme is null)
+					currentToken.lexeme = getCurrentLexeme();
+
+				return currentToken;
 		}
 
 		return currentToken;
@@ -76,6 +81,14 @@ private:
 				case Entity.null_, Entity.substitute:
 					return newToken(TokenKind.eof);
 
+				// brackets
+				case '(': return newToken(TokenKind.openParenthesis);
+				case ')': return newToken(TokenKind.closeParenthesis);
+				case '[': return newToken(TokenKind.openBracket);
+				case ']': return newToken(TokenKind.closeBracket);
+				case '{': return newToken(TokenKind.openBrace);
+				case '}': return newToken(TokenKind.closeBrace);
+
 				default: return Token.invalid;
 			}
 		}
@@ -84,6 +97,12 @@ private:
 	Token newToken (TokenKind kind, string lexeme = null)
 	{
 		return Token(kind, lexeme, scanner.bufferPosition);
+	}
+
+	string getCurrentLexeme ()
+	{
+		auto pos = scanner.bufferPosition;
+		return scanner.buffer[pos .. pos + current.codeLength!(char)];
 	}
 
 	Token scanIdentifier ()

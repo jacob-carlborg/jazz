@@ -129,6 +129,51 @@ describe! "Lexer" in {
 			assert(lexer.line == currentColumn + 1);
 		};
 	};
+
+	describe! "scan brackets" in {
+		describe! "should have correct token kind" in {
+			it! "(" in { assertTokenKind("(", TokenKind.openParenthesis); };
+			it! ")" in { assertTokenKind(")", TokenKind.closeParenthesis); };
+			it! "[" in { assertTokenKind("[", TokenKind.openBracket); };
+			it! "]" in { assertTokenKind("]", TokenKind.closeBracket); };
+			it! "{" in { assertTokenKind("{", TokenKind.openBrace); };
+			it! "}" in { assertTokenKind("}", TokenKind.closeBrace); };
+		};
+
+		describe! "should have correct lexeme" in {
+			it! "(" in { assertLexeme("(", "("); };
+			it! ")" in { assertLexeme(")", ")"); };
+			it! "[" in { assertLexeme("[", "["); };
+			it! "]" in { assertLexeme("]", "]"); };
+			it! "{" in { assertLexeme("{", "{"); };
+			it! "}" in { assertLexeme("}", "}"); };
+		};
+	};
 };
 
+}
+
+private:
+
+void assertTokenKind (string code, TokenKind kind, string file = __FILE__, size_t line = __LINE__)
+{
+	customAssert(newLexer(code).scan.kind == kind, "", file, line);
+}
+
+void assertLexeme (string code, string lexeme, string file = __FILE__, size_t line = __LINE__)
+{
+	customAssert(newLexer(code).scan.lexeme == lexeme, "", file, line);
+}
+
+Lexer newLexer (string code)
+{
+	return new Lexer(code);
+}
+
+void customAssert (bool conditoin, string message = "", string file = __FILE__, size_t line = __LINE__)
+{
+	import core.exception;
+
+	if (!conditoin)
+		throw new AssertError(message, file, line);
 }
