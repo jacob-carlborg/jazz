@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Feb 05, 2013
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
- * 
+ *
  */
 module spec.lexer.Lexer;
 
