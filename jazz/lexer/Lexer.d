@@ -23,7 +23,7 @@ class Lexer
 		Token currentToken;
 		uint bufferPosition = uint.max;
 
-		size_t column;
+		size_t column_;
 		size_t line_;
 	}
 
@@ -64,7 +64,18 @@ class Lexer
 		return line_;
 	}
 
+	/// Returns the current column of code being lexed.
+	@property size_t column ()
+	{
+		return column_;
+	}
+
 private:
+
+	@property size_t column (size_t column)
+	{
+		return column_ = column_;
+	}
 
 	Token nextToken ()
 	{
@@ -185,7 +196,7 @@ private:
 	{
 		bufferPosition += positions;
 		current = buffer[bufferPosition];
-		column++;
+		column_++;
 	}
 
 	dchar peek (size_t positions = 1)

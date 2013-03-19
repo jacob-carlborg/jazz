@@ -60,8 +60,7 @@ describe! "Lexer" in {
 			};
 
 			it! "should return a token with the correct lexeme" in {
-				auto stringLiteral = `foo
-				bar`;
+				auto stringLiteral = "foo\nbar";
 				auto code = `"` ~ stringLiteral ~ `"`;
 				auto lexer = new Lexer(code);
 
@@ -69,8 +68,7 @@ describe! "Lexer" in {
 			};
 
 			it! "should increment the line count" in {
-				auto code = `"foo
-				bar"`;
+				auto code = `"foo` ~ '\n' ~ `bar"`;
 				auto lexer = new Lexer(code);
 
 				auto currentLine = lexer.line;
@@ -93,6 +91,26 @@ describe! "Lexer" in {
 			auto lexer = new Lexer(code);
 
 			assert(lexer.scan.lexeme == code);
+		};
+	};
+
+	describe! "scan newline" in {
+		it! "should increment the line count" in {
+			auto code = "\n";
+			auto lexer = new Lexer(code);
+			auto currentLine = lexer.line;
+			lexer.scan;
+
+			assert(lexer.line == currentLine + 1);
+		};
+
+		it! "should increment the column count" in {
+			auto code = "\n";
+			auto lexer = new Lexer(code);
+			auto currentColumn = lexer.column;
+			lexer.scan;
+
+			assert(lexer.line == currentColumn + 1);
 		};
 	};
 };
