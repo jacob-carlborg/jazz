@@ -49,6 +49,35 @@ describe! "Lexer" in {
 				assert(lexer.scan.lexeme == stringLiteral);
 			};
 		};
+
+		describe! "string containing newline" in {
+			it! "should return a token with the type TokenKind.stringLiteral" in {
+				auto code = `"foo
+				bar"`;
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.kind == TokenKind.stringLiteral);
+			};
+
+			it! "should return a token with the correct lexeme" in {
+				auto stringLiteral = `foo
+				bar`;
+				auto code = `"` ~ stringLiteral ~ `"`;
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.lexeme == stringLiteral);
+			};
+
+			it! "should increment the line count" in {
+				auto code = `"foo
+				bar"`;
+				auto lexer = new Lexer(code);
+
+				auto currentLine = lexer.line;
+				lexer.scan;
+				assert(lexer.line == currentLine + 1);
+			};
+		};
 	};
 
 	describe! "valid identifier" in {

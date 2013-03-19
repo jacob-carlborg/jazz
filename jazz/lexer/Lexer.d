@@ -24,7 +24,7 @@ class Lexer
 		uint bufferPosition = uint.max;
 
 		size_t column;
-		size_t line;
+		size_t line_;
 	}
 
 	invariant ()
@@ -56,6 +56,12 @@ class Lexer
 	string code ()
 	{
 		return buffer;
+	}
+
+	/// Returns the current line of code being lexed.
+	@property size_t line ()
+	{
+		return line_;
 	}
 
 private:
@@ -133,6 +139,7 @@ private:
 		{
 			escapedQute = false;
 			advance();
+			skipNewline();
 
 			if (current == '\\' && peekMatches('"'))
 			{
@@ -170,7 +177,7 @@ private:
 
 	void newline ()
 	{
-		line++;
+		line_++;
 		column = 1;
 	}
 
