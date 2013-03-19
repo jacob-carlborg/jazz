@@ -5,4 +5,4 @@ if [ -s "$HOME/.dvm/scripts/dvm" ] ; then
     dvm use 2.061
 fi
 
-rdmd --build-only -debug -gc -ofbin/main -Imambo -L-ltango "$@" main.d
+rdmd --build-only -J. -debug -gc -ofbin/main -Imambo -L-ltango "$@" main.d
