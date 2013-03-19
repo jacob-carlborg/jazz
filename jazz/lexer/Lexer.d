@@ -129,13 +129,16 @@ private:
 		bool escapedQute;
 		auto pos = bufferPosition;
 
-		while (current != '"' && !escapedQute)
+		while (current != '"' || (escapedQute && current == '"'))
 		{
 			escapedQute = false;
 			advance();
 
 			if (current == '\\' && peekMatches('"'))
+			{
+				advance();
 				escapedQute = true;
+			}
 		}
 
 		auto lexeme = buffer[pos .. bufferPosition];

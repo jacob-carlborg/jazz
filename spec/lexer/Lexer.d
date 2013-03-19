@@ -32,6 +32,23 @@ describe! "Lexer" in {
 
 			assert(lexer.scan.lexeme == stringLiteral);
 		};
+
+		describe! "string containing escaped quotation mark" in {
+			it! "should return a token with the type TokenKind.stringLiteral" in {
+				auto code = `"foo\"bar"`;
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.kind == TokenKind.stringLiteral);
+			};
+
+			it! "should return a token with the correct lexeme" in {
+				auto stringLiteral = `foo\"bar`;
+				auto code = `"` ~ stringLiteral ~ `"`;
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.lexeme == stringLiteral);
+			};
+		};
 	};
 
 	describe! "valid identifier" in {
