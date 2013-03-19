@@ -6,8 +6,6 @@
  */
 module jazz.lexer.Lexer;
 
-import tango.text.Unicode;
-
 import mambo.core._;
 
 import jazz.lexer._;
@@ -102,4 +100,10 @@ private:
 	{
 		return StringLiteralScanner(scanner).scan();
 	}
+}
+
+private @property bool isLetter (dchar c)
+{
+	import tango.text.Unicode;
+	return c == '_' || tango.text.Unicode.isLetter(c);
 }

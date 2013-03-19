@@ -92,6 +92,22 @@ describe! "Lexer" in {
 
 			assert(lexer.scan.lexeme == code);
 		};
+
+		describe! "identifier stating with '_'" in {
+			it! "should return a token with the type TokenKind.identifier" in {
+				auto code = `_`;
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.kind == TokenKind.identifier);
+			};
+
+			it! "should return a token with '_' as the lexeme" in {
+				auto code = "_";
+				auto lexer = new Lexer(code);
+
+				assert(lexer.scan.lexeme == code);
+			};
+		};
 	};
 
 	describe! "scan newline" in {
