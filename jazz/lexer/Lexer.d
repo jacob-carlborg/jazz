@@ -101,6 +101,8 @@ private:
 
 	string getCurrentLexeme ()
 	{
+		import std.utf;
+
 		auto pos = scanner.bufferPosition;
 		return scanner.buffer[pos .. pos + current.codeLength!(char)];
 	}

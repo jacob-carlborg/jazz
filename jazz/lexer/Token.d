@@ -34,6 +34,6 @@ struct Token
 
 	bool isValid ()
 	{
-		return this != Token.invalid;
+		return kind != TokenKind.invalid && lexeme !is null;
 	}
 }
