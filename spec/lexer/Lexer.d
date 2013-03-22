@@ -149,6 +149,88 @@ describe! "Lexer" in {
 			it! "}" in { assertLexeme("}", "}"); };
 		};
 	};
+
+	describe! "scan operators" in {
+		describe! "should have correct token kind" in {
+			it! "/" in { assertTokenKind("/", TokenKind.slash); };
+			it! "/=" in { assertTokenKind("/=", TokenKind.slashEqual); };
+			it! "." in { assertTokenKind(".", TokenKind.dot); };
+			it! ".." in { assertTokenKind("..", TokenKind.doubleDot); };
+			it! "..." in { assertTokenKind("...", TokenKind.tripleDot); };
+			it! "&" in { assertTokenKind("&", TokenKind.ampersand); };
+			it! "&=" in { assertTokenKind("&=", TokenKind.ampersandEqual); };
+			it! "&&" in { assertTokenKind("&&", TokenKind.doubleAmpersand); };
+			it! "|" in { assertTokenKind("|", TokenKind.pipe); };
+			it! "|=" in { assertTokenKind("|=", TokenKind.pipeEqual); };
+			it! "||" in { assertTokenKind("||", TokenKind.doublePipe); };
+			it! "-" in { assertTokenKind("-", TokenKind.minus); };
+			it! "-=" in { assertTokenKind("-=", TokenKind.minusEqual); };
+			it! "+" in { assertTokenKind("+", TokenKind.plus); };
+			it! "+=" in { assertTokenKind("+=", TokenKind.plusEqual); };
+			it! "++" in { assertTokenKind("++", TokenKind.doublePlus); };
+			it! "<" in { assertTokenKind("<", TokenKind.less); };
+			it! "<=" in { assertTokenKind("<=", TokenKind.lessEqual); };
+			it! "<<" in { assertTokenKind("<<", TokenKind.doubleLess); };
+			it! ">" in { assertTokenKind(">", TokenKind.greater); };
+			it! ">=" in { assertTokenKind(">=", TokenKind.greaterEqual); };
+			it! ">>=" in { assertTokenKind(">>=", TokenKind.doubleGreaterEqual); };
+			it! ">>>=" in { assertTokenKind(">>>=", TokenKind.tripleGreaterEqual); };
+			it! ">>" in { assertTokenKind(">>", TokenKind.doubleGreater); };
+			it! ">>>" in { assertTokenKind(">>>", TokenKind.tripleGreater); };
+			it! "!" in { assertTokenKind("!", TokenKind.bang); };
+			it! "!=" in { assertTokenKind("!=", TokenKind.bangEqual); };
+			it! "=" in { assertTokenKind("=", TokenKind.equal); };
+			it! "==" in { assertTokenKind("==", TokenKind.doubleEqual); };
+			it! "%" in { assertTokenKind("%", TokenKind.percent); };
+			it! "%=" in { assertTokenKind("%=", TokenKind.percentEuqal); };
+			it! "^" in { assertTokenKind("^", TokenKind.caret); };
+			it! "^=" in { assertTokenKind("^=", TokenKind.caretEqual); };
+			it! "^^" in { assertTokenKind("^^", TokenKind.doubleCaret); };
+			it! "^^=" in { assertTokenKind("^^=", TokenKind.doubleCaretEqual); };
+			it! "~" in { assertTokenKind("~", TokenKind.tilde); };
+			it! "~=" in { assertTokenKind("~=", TokenKind.tildeEqual); };
+		};
+
+		describe! "should have correct lexeme" in {
+			it! "/" in { assertLexeme("/", "/"); };
+			it! "/=" in { assertLexeme("/=", "/="); };
+			it! "." in { assertLexeme(".", "."); };
+			it! ".." in { assertLexeme("..", ".."); };
+			it! "..." in { assertLexeme("...", "..."); };
+			it! "&" in { assertLexeme("&", "&"); };
+			it! "&=" in { assertLexeme("&=", "&="); };
+			it! "&&" in { assertLexeme("&&", "&&"); };
+			it! "|" in { assertLexeme("|", "|"); };
+			it! "|=" in { assertLexeme("|=", "|="); };
+			it! "||" in { assertLexeme("||", "||"); };
+			it! "-" in { assertLexeme("-", "-"); };
+			it! "-=" in { assertLexeme("-=", "-="); };
+			it! "+" in { assertLexeme("+", "+"); };
+			it! "+=" in { assertLexeme("+=", "+="); };
+			it! "++" in { assertLexeme("++", "++"); };
+			it! "<" in { assertLexeme("<", "<"); };
+			it! "<=" in { assertLexeme("<=", "<="); };
+			it! "<<" in { assertLexeme("<<", "<<"); };
+			it! ">" in { assertLexeme(">", ">"); };
+			it! ">=" in { assertLexeme(">=", ">="); };
+			it! ">>=" in { assertLexeme(">>=", ">>="); };
+			it! ">>>=" in { assertLexeme(">>>=", ">>>="); };
+			it! ">>" in { assertLexeme(">>", ">>"); };
+			it! ">>>" in { assertLexeme(">>>", ">>>"); };
+			it! "!" in { assertLexeme("!", "!"); };
+			it! "!=" in { assertLexeme("!=", "!="); };
+			it! "=" in { assertLexeme("=", "="); };
+			it! "==" in { assertLexeme("==", "=="); };
+			it! "%" in { assertLexeme("%", "%"); };
+			it! "%=" in { assertLexeme("%=", "%="); };
+			it! "^" in { assertLexeme("^", "^"); };
+			it! "^=" in { assertLexeme("^=", "^="); };
+			it! "^^" in { assertLexeme("^^", "^^"); };
+			it! "^^=" in { assertLexeme("^^=", "^^="); };
+			it! "~" in { assertLexeme("~", "~"); };
+			it! "~=" in { assertLexeme("~=", "~="); };
+		};
+	};
 };
 
 }

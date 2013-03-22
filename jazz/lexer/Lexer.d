@@ -31,6 +31,9 @@ class Lexer
 			case TokenKind.stringLiteral: return scanStringLiteral();
 
 			default:
+				if (OperatorScanner.isStartOfOperator(current))
+					return scanOperator();
+
 				if (currentToken.lexeme is null)
 					currentToken.lexeme = getCurrentLexeme();
 
@@ -120,6 +123,11 @@ private:
 	body
 	{
 		return StringLiteralScanner(scanner).scan();
+	}
+
+	Token scanOperator ()
+	{
+		return OperatorScanner(scanner).scan();
 	}
 }
 
