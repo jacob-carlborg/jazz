@@ -34,7 +34,7 @@ package struct IdentifierScanner
 		while (current.isLetterOrDigit)
 			advance(current.codeLength!(char));
 
-		auto lexeme = buffer[pos .. bufferPosition];
+		auto lexeme = getLexeme(pos);
 		auto kind = isKeyword(lexeme) ? TokenKind.keyword : TokenKind.identifier;
 
 		return Token(kind, lexeme, pos);

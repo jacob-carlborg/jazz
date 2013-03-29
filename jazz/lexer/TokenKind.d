@@ -35,6 +35,7 @@ enum TokenKind : ushort
 	doublePipe,							/// ||
 	minus,								/// -
 	minusEqual,							/// -=
+	doubleMinus,						/// --
 	plus,								/// +
 	plusEqual,							/// +=
 	doublePlus,							/// ++

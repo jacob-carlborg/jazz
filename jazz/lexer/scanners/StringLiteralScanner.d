@@ -42,7 +42,6 @@ package struct StringLiteralScanner
 			}
 		}
 
-		auto lexeme = buffer[pos .. bufferPosition];
-		return Token(TokenKind.stringLiteral, lexeme, pos);
+		return Token(TokenKind.stringLiteral, getLexeme(pos), pos);
 	}
 }

@@ -90,11 +90,6 @@ struct Scanner
 	}
 
 	dchar peek (size_t positions = 1)
-	in
-	{
-		assert(bufferPosition + positions < buffer.length, "Buffer position is out of bounds");
-	}
-	body
 	{
 		return buffer[bufferPosition + positions];
 	}
@@ -102,5 +97,20 @@ struct Scanner
 	bool peekMatches (dchar c, size_t positions = 1)
 	{
 		return peek(positions) == c;
+	}
+
+	string getLexeme (size_t start, size_t end = size_t.max)
+	in
+	{
+		assert(start < buffer.length, "Buffer start position it out of bounds");
+	}
+	body
+	{
+		if (end == size_t.max)
+			end = bufferPosition;
+
+		assert(end < buffer.length, "Buffer end position it out of bounds");
+
+		return buffer[start .. bufferPosition];
 	}
 }

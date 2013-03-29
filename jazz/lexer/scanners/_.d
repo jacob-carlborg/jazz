@@ -9,6 +9,7 @@ module jazz.lexer.scanners._;
 public:
 
 import jazz.lexer.scanners.IdentifierScanner;
+import jazz.lexer.scanners.OperatorScanner;
 import jazz.lexer.scanners.Scanner;
 import jazz.lexer.scanners.ScannerTrait;
 import jazz.lexer.scanners.StringLiteralScanner;

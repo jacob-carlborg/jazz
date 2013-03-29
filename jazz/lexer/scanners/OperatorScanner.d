@@ -6,6 +6,8 @@
  */
 module jazz.lexer.scanners.OperatorScanner;
 
+import mambo.core._;
+
 import jazz.lexer.Token;
 import jazz.lexer.TokenKind;
 
@@ -46,6 +48,121 @@ package struct OperatorScanner
 	}
 	body
 	{
-		return Token.invalid;
+		auto pos = bufferPosition;
+		TokenKind kind;
+
+		with (TokenKind)
+			switch (current)
+			{
+				case '/':
+					kind = isNextOperator('=') ? slashEqual : slash;
+				break;
+
+				case '.':
+					if (isNextOperator('.'))
+					{
+						kind = doubleDot;
+
+						if (isNextOperator('.'))
+							kind = tripleDot;
+					}
+
+					else
+						kind = dot;
+				break;
+
+				case '&':
+					if (isNextOperator('&')) kind = doubleAmpersand;
+					else if (isNextOperator('=')) kind = ampersandEqual;
+					else kind = ampersand;
+				break;
+
+				case '|':
+					if (isNextOperator('|')) kind = doublePipe;
+					else if (isNextOperator('=')) kind = pipeEqual;
+					else kind = pipe;
+				break;
+
+				case '-':
+					if (isNextOperator('-')) kind = doubleMinus;
+					else if (isNextOperator('=')) kind = minusEqual;
+					else kind = minus;
+				break;
+
+				case '+':
+					if (isNextOperator('+')) kind = doublePlus;
+					else if (isNextOperator('=')) kind = plusEqual;
+					else kind = plus;
+				break;
+
+				case '<':
+					if (isNextOperator('<')) kind = doubleLess;
+					else if (isNextOperator('=')) kind = lessEqual;
+					else kind = less;
+				break;
+
+				case '>':
+					if (isNextOperator('>'))
+					{
+						if (isNextOperator('>'))
+						{
+							if (isNextOperator('=')) kind = tripleGreaterEqual;
+							else kind = tripleGreater;
+						}
+
+						else
+						{
+							if (isNextOperator('=')) kind = doubleGreaterEqual;
+							else kind = doubleGreater;
+						}
+					}
+
+					else if (isNextOperator('=')) kind = greaterEqual;
+					else kind = greater;
+				break;
+
+				case '!':
+					kind = isNextOperator('=') ? bangEqual : bang;
+				break;
+
+				case '=':
+					kind = isNextOperator('=') ? doubleEqual : equal;
+				break;
+
+				case '%':
+					kind = isNextOperator('=') ? percentEuqal : percent;
+				break;
+
+				case '^':
+					if (isNextOperator('^'))
+						kind = isNextOperator('=') ? doubleCaretEqual : doubleCaret;
+
+					else if (isNextOperator('=')) kind = caretEqual;
+					else kind = caret;
+				break;
+
+				case '~':
+					kind = isNextOperator('=') ? tildeEqual : tilde;
+				break;
+
+				default:
+					kind = invalid;
+			}
+
+		advance();
+
+		return Token(kind, getLexeme(pos),pos);
+	}
+
+private:
+
+	bool isNextOperator (dchar c)
+	{
+		auto match = peekMatches(c);
+
+		if (match)
+			advance();
+
+		return match;
 	}
 }
