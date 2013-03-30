@@ -26,8 +26,8 @@ struct Scanner
 	dchar current = ' ';
 	uint bufferPosition = uint.max;
 
-	size_t column;
-	size_t line;
+	size_t column = 1;
+	size_t line = 1;
 
 	invariant ()
 	{
