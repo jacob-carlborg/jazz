@@ -52,116 +52,59 @@ package struct OperatorScanner
 		TokenKind kind;
 
 		with (TokenKind)
-			switch (current)
-			{
-				case '/':
-					kind = isNextOperator('=') ? slashEqual : slash;
-				break;
+		{
+			if (isNextOperator("/=")) kind = slashEqual;
+			else if (isNextOperator("/")) kind = slash;
+			else if (isNextOperator("...")) kind = tripleDot;
+			else if (isNextOperator("..")) kind = doubleDot;
+			else if (isNextOperator(".")) kind = dot;
+			else if (isNextOperator("&&")) kind = doubleAmpersand;
+			else if (isNextOperator("&=")) kind = ampersandEqual;
+			else if (isNextOperator("&")) kind = ampersand;
+			else if (isNextOperator("||")) kind = doublePipe;
+			else if (isNextOperator("|=")) kind = pipeEqual;
+			else if (isNextOperator("|")) kind = pipe;
+			else if (isNextOperator("--")) kind = doubleMinus;
+			else if (isNextOperator("-=")) kind = minusEqual;
+			else if (isNextOperator("-")) kind = minus;
+			else if (isNextOperator("++")) kind = doublePlus;
+			else if (isNextOperator("+=")) kind = plusEqual;
+			else if (isNextOperator("+")) kind = plus;
+			else if (isNextOperator(">>>=")) kind = tripleGreaterEqual;
+			else if (isNextOperator(">>>")) kind = tripleGreater;
+			else if (isNextOperator(">>=")) kind = doubleGreaterEqual;
+			else if (isNextOperator(">>")) kind = doubleGreater;
+			else if (isNextOperator(">=")) kind = greaterEqual;
+			else if (isNextOperator(">")) kind = greater;
+			else if (isNextOperator("<<")) kind = doubleLess;
+			else if (isNextOperator("<=")) kind = lessEqual;
+			else if (isNextOperator("<")) kind = less;
+			else if (isNextOperator("!=")) kind = bangEqual;
+			else if (isNextOperator("!")) kind = bang;
+			else if (isNextOperator("==")) kind = doubleEqual;
+			else if (isNextOperator("=>")) kind = equalGreater;
+			else if (isNextOperator("=")) kind = equal;
+			else if (isNextOperator("%=")) kind = percentEuqal;
+			else if (isNextOperator("%")) kind = percent;
+			else if (isNextOperator("^^=")) kind = doubleCaretEqual;
+			else if (isNextOperator("^^")) kind = doubleCaret;
+			else if (isNextOperator("^=")) kind = caretEqual;
+			else if (isNextOperator("^")) kind = caret;
+			else if (isNextOperator("~=")) kind = tildeEqual;
+			else if (isNextOperator("~")) kind = tilde;
+		}
 
-				case '.':
-					if (isNextOperator('.'))
-					{
-						kind = doubleDot;
-
-						if (isNextOperator('.'))
-							kind = tripleDot;
-					}
-
-					else
-						kind = dot;
-				break;
-
-				case '&':
-					if (isNextOperator('&')) kind = doubleAmpersand;
-					else if (isNextOperator('=')) kind = ampersandEqual;
-					else kind = ampersand;
-				break;
-
-				case '|':
-					if (isNextOperator('|')) kind = doublePipe;
-					else if (isNextOperator('=')) kind = pipeEqual;
-					else kind = pipe;
-				break;
-
-				case '-':
-					if (isNextOperator('-')) kind = doubleMinus;
-					else if (isNextOperator('=')) kind = minusEqual;
-					else kind = minus;
-				break;
-
-				case '+':
-					if (isNextOperator('+')) kind = doublePlus;
-					else if (isNextOperator('=')) kind = plusEqual;
-					else kind = plus;
-				break;
-
-				case '<':
-					if (isNextOperator('<')) kind = doubleLess;
-					else if (isNextOperator('=')) kind = lessEqual;
-					else kind = less;
-				break;
-
-				case '>':
-					if (isNextOperator('>'))
-					{
-						if (isNextOperator('>'))
-						{
-							if (isNextOperator('=')) kind = tripleGreaterEqual;
-							else kind = tripleGreater;
-						}
-
-						else
-						{
-							if (isNextOperator('=')) kind = doubleGreaterEqual;
-							else kind = doubleGreater;
-						}
-					}
-
-					else if (isNextOperator('=')) kind = greaterEqual;
-					else kind = greater;
-				break;
-
-				case '!':
-					kind = isNextOperator('=') ? bangEqual : bang;
-				break;
-
-				case '=':
-					kind = isNextOperator('=') ? doubleEqual : equal;
-				break;
-
-				case '%':
-					kind = isNextOperator('=') ? percentEuqal : percent;
-				break;
-
-				case '^':
-					if (isNextOperator('^'))
-						kind = isNextOperator('=') ? doubleCaretEqual : doubleCaret;
-
-					else if (isNextOperator('=')) kind = caretEqual;
-					else kind = caret;
-				break;
-
-				case '~':
-					kind = isNextOperator('=') ? tildeEqual : tilde;
-				break;
-
-				default:
-					kind = invalid;
-			}
-
-		advance();
-
-		return Token(kind, getLexeme(pos),pos);
+		return Token(kind, getLexeme(pos), pos);
 	}
 
 private:
 
-	bool isNextOperator (dchar c)
+	bool isNextOperator (string str)
 	{
-		auto match = peekMatches(c);
+		auto match = peekMatches(str, 0);
 
 		if (match)
-			advance();
+			advance(str.length);
 
 		return match;
 	}

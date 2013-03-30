@@ -24,10 +24,10 @@ package struct StringLiteralScanner
 
 	Token scan ()
 	{
-		advance();
-
 		bool escapedQute;
 		auto pos = bufferPosition;
+
+		advance();
 
 		while (current != '"' || (escapedQute && current == '"'))
 		{
@@ -41,6 +41,8 @@ package struct StringLiteralScanner
 				escapedQute = true;
 			}
 		}
+
+		advance();
 
 		return Token(TokenKind.stringLiteral, getLexeme(pos), pos);
 	}

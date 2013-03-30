@@ -76,30 +76,48 @@ private:
 
 		else
 		{
-			switch (current)
-			{
-				case '"':
-					return newToken(TokenKind.stringLiteral);
+			with (TokenKind)
+				switch (current)
+				{
+					case '"':
+						return newToken(TokenKind.stringLiteral);
 
-				case Entity.null_, Entity.substitute:
-					return newToken(TokenKind.eof);
+					case Entity.null_, Entity.substitute:
+						return newToken(TokenKind.eof);
 
-				// brackets
-				case '(': return newToken(TokenKind.openParenthesis);
-				case ')': return newToken(TokenKind.closeParenthesis);
-				case '[': return newToken(TokenKind.openBracket);
-				case ']': return newToken(TokenKind.closeBracket);
-				case '{': return newToken(TokenKind.openBrace);
-				case '}': return newToken(TokenKind.closeBrace);
+					// brackets
+					case '(': return handleSingleToken(openParenthesis);
+					case ')': return handleSingleToken(closeParenthesis);
+					case '[': return handleSingleToken(openBracket);
+					case ']': return handleSingleToken(closeBracket);
+					case '{': return handleSingleToken(openBrace);
+					case '}': return handleSingleToken(closeBrace);
 
-				default: return Token.invalid;
-			}
+					// miscellaneous
+					case '?': return handleSingleToken(question);
+					case ',': return handleSingleToken(comma);
+					case ';': return handleSingleToken(semicolon);
+					case ':': return handleSingleToken(colon);
+					case '$': return handleSingleToken(dollar);
+					case '@': return handleSingleToken(at);
+					case '#': return handleSingleToken(hash);
+
+					default: return Token.invalid;
+				}
 		}
 	}
 
 	Token newToken (TokenKind kind, string lexeme = null)
 	{
 		return Token(kind, lexeme, scanner.bufferPosition);
+	}
+
+	Token handleSingleToken (TokenKind kind)
+	{
+		auto token = newToken(kind, getCurrentLexeme);
+		scanner.advance();
+
+		return token;
 	}
 
 	string getCurrentLexeme ()

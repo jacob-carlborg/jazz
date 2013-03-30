@@ -51,6 +51,7 @@ enum TokenKind : ushort
 	bang,								/// !
 	bangEqual,							/// !=
 	equal,								/// =
+	equalGreater,						/// =>
 	doubleEqual,						/// ==
 	percent,							/// %
 	percentEuqal,						/// %=
@@ -86,7 +87,6 @@ enum TokenKind : ushort
 	colon,								/// :
 	dollar,								/// $
 	at,									/// @
-	equalGreater,						/// =>
 	hash,								/// #
 
 	// Special tokens

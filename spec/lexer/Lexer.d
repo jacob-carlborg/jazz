@@ -26,11 +26,10 @@ describe! "Lexer" in {
 		};
 
 		it! "should return a token with the correct lexeme" in {
-			auto stringLiteral = "asd";
-			auto code = `"` ~ stringLiteral ~ `"`;
+			auto code = `"asd"`;
 			auto lexer = new Lexer(code);
 
-			assert(lexer.scan.lexeme == stringLiteral);
+			assert(lexer.scan.lexeme == code);
 		};
 
 		describe! "string containing escaped quotation mark" in {
@@ -42,11 +41,10 @@ describe! "Lexer" in {
 			};
 
 			it! "should return a token with the correct lexeme" in {
-				auto stringLiteral = `foo\"bar`;
-				auto code = `"` ~ stringLiteral ~ `"`;
+				auto code = `"foo\"bar"`;
 				auto lexer = new Lexer(code);
 
-				assert(lexer.scan.lexeme == stringLiteral);
+				assert(lexer.scan.lexeme == code);
 			};
 		};
 
@@ -60,11 +58,10 @@ describe! "Lexer" in {
 			};
 
 			it! "should return a token with the correct lexeme" in {
-				auto stringLiteral = "foo\nbar";
-				auto code = `"` ~ stringLiteral ~ `"`;
+				auto code = `"` ~ "foo\nbar" ~ `"`;
 				auto lexer = new Lexer(code);
 
-				assert(lexer.scan.lexeme == stringLiteral);
+				assert(lexer.scan.lexeme == code);
 			};
 
 			it! "should increment the line count" in {
@@ -180,6 +177,7 @@ describe! "Lexer" in {
 			it! "!" in { assertTokenKind("!", TokenKind.bang); };
 			it! "!=" in { assertTokenKind("!=", TokenKind.bangEqual); };
 			it! "=" in { assertTokenKind("=", TokenKind.equal); };
+			it! "=>" in { assertTokenKind("=>", TokenKind.equalGreater); };
 			it! "==" in { assertTokenKind("==", TokenKind.doubleEqual); };
 			it! "%" in { assertTokenKind("%", TokenKind.percent); };
 			it! "%=" in { assertTokenKind("%=", TokenKind.percentEuqal); };
@@ -220,6 +218,7 @@ describe! "Lexer" in {
 			it! "!" in { assertLexeme("!", "!"); };
 			it! "!=" in { assertLexeme("!=", "!="); };
 			it! "=" in { assertLexeme("=", "="); };
+			it! "=>" in { assertLexeme("=>", "=>"); };
 			it! "==" in { assertLexeme("==", "=="); };
 			it! "%" in { assertLexeme("%", "%"); };
 			it! "%=" in { assertLexeme("%=", "%="); };
@@ -229,6 +228,18 @@ describe! "Lexer" in {
 			it! "^^=" in { assertLexeme("^^=", "^^="); };
 			it! "~" in { assertLexeme("~", "~"); };
 			it! "~=" in { assertLexeme("~=", "~="); };
+		};
+	};
+
+	describe! "scan miscellaneous" in {
+		describe! "should have correct token kind" in {
+			it! "?" in { assertTokenKind("?", TokenKind.question); };
+			it! "," in { assertTokenKind(",", TokenKind.comma); };
+			it! ";" in { assertTokenKind(";", TokenKind.semicolon); };
+			it! ":" in { assertTokenKind(":", TokenKind.colon); };
+			it! "$" in { assertTokenKind("$", TokenKind.dollar); };
+			it! "@" in { assertTokenKind("@", TokenKind.at); };
+			it! "#" in { assertTokenKind("#", TokenKind.hash); };
 		};
 	};
 };

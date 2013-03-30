@@ -45,11 +45,12 @@ struct Scanner
 	{
 		while (true)
 		{
-			advance();
 			skipNewline();
 
 			if (!isWhitespace(current))
 				break;
+
+			advance();
 		}
 	}
 
@@ -97,6 +98,20 @@ struct Scanner
 	bool peekMatches (dchar c, size_t positions = 1)
 	{
 		return peek(positions) == c;
+	}
+
+	bool peekMatches (string str, size_t positions = 1)
+	in
+	{
+		assert(str.any, "String cannot be empty");
+	}
+	body
+	{
+		foreach (i, char c ; str)
+			if (!peekMatches(c, i + positions))
+				return false;
+
+		return true;
 	}
 
 	string getLexeme (size_t start, size_t end = size_t.max)
