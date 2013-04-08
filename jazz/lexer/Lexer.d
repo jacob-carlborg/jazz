@@ -34,6 +34,9 @@ class Lexer
 				if (OperatorScanner.isStartOfOperator(current))
 					return scanOperator();
 
+				else if (CommentScanner.isComment(current, peek))
+					return scanComment();
+
 				if (currentToken.lexeme is null)
 					currentToken.lexeme = getCurrentLexeme();
 
@@ -65,6 +68,11 @@ private:
 	@property dchar current ()
 	{
 		return scanner.current;
+	}
+
+	@property dchar peek ()
+	{
+		return scanner.peek;
 	}
 
 	Token nextToken ()
@@ -146,6 +154,11 @@ private:
 	Token scanOperator ()
 	{
 		return OperatorScanner(scanner).scan();
+	}
+
+	Token scanComment ()
+	{
+		return CommentScanner(scanner).scan();
 	}
 }
 

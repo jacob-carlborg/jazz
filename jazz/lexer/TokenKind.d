@@ -89,6 +89,11 @@ enum TokenKind : ushort
 	at,									/// @
 	hash,								/// #
 
+	// Comments
+	singleLine,							/// // foo
+	multiLine,							/// /* foo */
+	nested,								/// /+ foo +/
+
 	// Special tokens
 	date,								/// __DATE__
 	eof,								/// __EOF__
