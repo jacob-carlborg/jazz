@@ -13,12 +13,17 @@ import jazz.lexer.scanners._;
 
 class Lexer
 {
-	private Token currentToken;
-	private Scanner scanner;
+	private
+	{
+		Token currentToken;
+		Scanner scanner;
+		CommentScanner commentScanner;
+	}
 
 	this (string code)
 	{
 		scanner = Scanner(code);
+		commentScanner = CommentScanner(scanner);
 	}
 
 	Token scan ()
@@ -31,11 +36,11 @@ class Lexer
 			case TokenKind.stringLiteral: return scanStringLiteral();
 
 			default:
+				if (commentScanner.isComment(current))
+					return scanComment();
+
 				if (OperatorScanner.isStartOfOperator(current))
 					return scanOperator();
-
-				else if (CommentScanner.isComment(current, peek))
-					return scanComment();
 
 				if (currentToken.lexeme is null)
 					currentToken.lexeme = getCurrentLexeme();
@@ -158,7 +163,7 @@ private:
 
 	Token scanComment ()
 	{
-		return CommentScanner(scanner).scan();
+		return commentScanner.scan();
 	}
 }
 

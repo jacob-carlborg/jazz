@@ -54,7 +54,7 @@ struct Scanner
 		}
 	}
 
-	void skipNewline ()
+	bool skipNewline ()
 	{
 		switch (current)
 		{
@@ -62,17 +62,19 @@ struct Scanner
 			case Entity.lineSeparator:
 			case Entity.paragraphSeparator:
 				newline();
-			return;
+			    return true;
+			break;
 
 			case Entity.carriageReturn:
 				if (peekMatches(Entity.lineFeed))
 					advance();
 
 				newline();
+				return true;
 			break;
 
 			default:
-				// do nothing
+				return false;
 			break;
 		}
 	}

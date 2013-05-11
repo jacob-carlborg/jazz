@@ -13,6 +13,7 @@ void main ()
 {
 	string code = "module foöbar;";
 	code = import(__FILE__);
+	code = "//foo";
 
 
 	auto lexer = new Lexer(code);

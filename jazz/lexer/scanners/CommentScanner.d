@@ -6,6 +6,9 @@
  */
 module jazz.lexer.scanners.CommentScanner;
 
+import mambo.core._;
+
+import jazz.lexer.Entity;
 import jazz.lexer.Token;
 import jazz.lexer.TokenKind;
 
@@ -18,7 +21,7 @@ package struct CommentScanner
 	///
 	mixin ScannerTrait;
 
-	static bool isComment (dchar current, dchar peek)
+	bool isComment (dchar current)
 	{
 		if (current != '/')
 			return false;
@@ -38,7 +41,7 @@ package struct CommentScanner
 	Token scan ()
 	in
 	{
-		assert(CommentScanner.isComment(current, peek), "The current token is not the start of an identifier");
+		assert(isComment(current), "The current token is not the start of an identifier");
 	}
 	body
 	{
@@ -56,6 +59,8 @@ package struct CommentScanner
 			default: assert(0, "should never happen");
 		}
 
+ 		advance();
+
 		return Token(kind, getLexeme(pos), pos);
 	}
 
@@ -63,12 +68,8 @@ private:
 
 	TokenKind scanSingleLine ()
 	{
-		auto currenLine = line;
-
-		do
-		{
-			advance();
-		} while (currenLine == line);
+		while (!skipNewline() && !isEof(peek))
+		    advance();
 
 		return TokenKind.singleLine;
 	}
@@ -82,4 +83,16 @@ private:
 	{
 		return TokenKind.nested;
 	}
+}
+
+private @property isEof (dchar c)
+{
+    switch (c)
+    {
+        case Entity.null_, Entity.substitute:
+            return true;
+
+        default:
+            return false;
+    }
 }
