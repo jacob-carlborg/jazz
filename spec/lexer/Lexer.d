@@ -252,6 +252,13 @@ describe! "Lexer" in {
 			it! "should return a token with the '//foo' as the lexeme" in {
 				assertLexeme("//foo", "//foo");
 			};
+
+			it! "should not span multiple lines" in {
+				auto code = "//foo\nbar";
+				auto lexer = new Lexer(code);
+				lexer.scan();
+				assert(lexer.scan.kind == TokenKind.identifier);
+			};
 		};
 
 		describe! "multi line comment" in {
@@ -263,7 +270,7 @@ describe! "Lexer" in {
 				assertLexeme("/*foo*/", "/*foo*/");
 			};
 
-			it! "should handle multi line comments" in {
+			it! "should handle comments spanning multiple lines" in {
 				assertLexeme("/*foo\n\nbar*/", "/*foo\n\nbar*/");
 			};
 		};
