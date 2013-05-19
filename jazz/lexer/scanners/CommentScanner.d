@@ -76,15 +76,16 @@ private:
 
 	TokenKind scanMultiLine ()
 	{
-		advance();
-
-		while (!isEof(peek))
+		while (true)
 		{
 			if (current == '*' && peek == '/')
 				break;
 
-			skipNewline();
+			if (isEof(peek))
+				return TokenKind.invalid;
+
 			advance();
+			skipNewline();			
 		}
 
 		advance();
@@ -94,6 +95,31 @@ private:
 
 	TokenKind scanNested ()
 	{
+		size_t level = 0;
+
+		while (true)
+		{
+			if (current == '+' && peek == '/')
+			{
+				if (level == 0)
+					break;
+
+				else
+					level--;
+			}
+
+			if (current == '/' && peek == '+')
+				level++;
+
+			if (isEof(peek))
+				return TokenKind.invalid;
+
+			advance();
+			skipNewline();
+		}
+
+		advance();
+
 		return TokenKind.nested;
 	}
 }

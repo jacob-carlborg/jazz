@@ -273,6 +273,40 @@ describe! "Lexer" in {
 			it! "should handle comments spanning multiple lines" in {
 				assertLexeme("/*foo\n\nbar*/", "/*foo\n\nbar*/");
 			};
+
+			describe! "invalid comment" in {
+				it! "should return an invalid token for unclosed comment" in {
+					assertTokenKind("/*foo", TokenKind.invalid);
+				};
+			};
+		};
+
+		describe! "nested comment" in {
+			it! "should return a token with the type TokenKind.nested" in {
+				assertTokenKind("/+foo+/", TokenKind.nested);
+			};
+
+			it! "should return a token with the '/+foo+/' as the lexeme" in {
+				assertLexeme("/+foo+/", "/+foo+/");
+			};
+
+			it! "should handle comments spanning multiple lines" in {
+				assertLexeme("/+foo\n\nbar+/", "/+foo\n\nbar+/");
+			};
+
+			it! "should handle nested comments" in {
+				assertLexeme("/+foo\n/+asd+/\nbar+/", "/+foo\n/+asd+/\nbar+/");
+			};
+
+			describe! "invalid comment" in {
+				it! "should return an invalid token for unclosed comment" in {
+					assertTokenKind("/+foo", TokenKind.invalid);
+				};
+
+				it! "should return an invalid token for unbalanced comment" in {
+					assertTokenKind("/+foo/+bar+/", TokenKind.invalid);
+				};
+			};
 		};
 	};
 };
