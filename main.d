@@ -13,7 +13,8 @@ void main ()
 {
 	string code = "module foöbar;";
 	code = import(__FILE__);
-	code = "//foo";
+	code = "/*foo*/";
+	code = "/*foo\n\nbar*/asd";
 
 
 	auto lexer = new Lexer(code);

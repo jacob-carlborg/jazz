@@ -59,7 +59,7 @@ package struct CommentScanner
 			default: assert(0, "should never happen");
 		}
 
- 		advance();
+		advance();
 
 		return Token(kind, getLexeme(pos), pos);
 	}
@@ -76,6 +76,19 @@ private:
 
 	TokenKind scanMultiLine ()
 	{
+		advance();
+
+		while (!isEof(peek))
+		{
+			if (current == '*' && peek == '/')
+				break;
+
+			skipNewline();
+			advance();
+		}
+
+		advance();
+
 		return TokenKind.multiLine;
 	}
 

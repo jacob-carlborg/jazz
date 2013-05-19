@@ -245,12 +245,26 @@ describe! "Lexer" in {
 
 	describe! "scan comments" in {
 		describe! "single line comment" in {
-			it! "should return a token with with the type TokenKind.singleLine" in {
+			it! "should return a token with the type TokenKind.singleLine" in {
 				assertTokenKind("//foo", TokenKind.singleLine);
 			};
 	
 			it! "should return a token with the '//foo' as the lexeme" in {
 				assertLexeme("//foo", "//foo");
+			};
+		};
+
+		describe! "multi line comment" in {
+			it! "should return a token with the type TokenKind.multiLine" in {
+				assertTokenKind("/*foo*/", TokenKind.multiLine);
+			};
+
+			it! "should return a token with the '/*foo*/' as the lexeme" in {
+				assertLexeme("/*foo*/", "/*foo*/");
+			};
+
+			it! "should handle multi line comments" in {
+				assertLexeme("/*foo\n\nbar*/", "/*foo\n\nbar*/");
 			};
 		};
 	};
