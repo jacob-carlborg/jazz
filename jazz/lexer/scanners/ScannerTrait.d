@@ -10,11 +10,11 @@ mixin template ScannerTrait ()
 {
 	import std.utf : codeLength;
 
-	private Scanner* scanner;
+	private Scanner scanner;
 	alias scanner this;
 
-	this (/*const*/ ref Scanner scanner)
+	this (Scanner scanner)
 	{
-		this.scanner = &scanner;
+		this.scanner = scanner;
 	}
 }

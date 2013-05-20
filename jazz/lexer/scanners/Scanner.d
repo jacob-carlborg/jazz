@@ -20,7 +20,7 @@ import jazz.lexer.Entity;
  * getting the next character, handling line and column count, handling newlines and similar
  * functions.
  */
-struct Scanner
+package final class Scanner
 {
 	immutable string buffer;
 	dchar current = ' ';

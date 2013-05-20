@@ -23,7 +23,7 @@ class Lexer
 
 	this (string code)
 	{
-		scanner = Scanner(code);
+		scanner = new Scanner(code);
 		commentScanner = CommentScanner(scanner);
 		characterLiteralScanner = CharacterLiteralScanner(scanner);
 	}
