@@ -23,6 +23,11 @@ package struct StringLiteralScanner
 	mixin ScannerTrait;
 
 	Token scan ()
+	in
+	{
+		assert(current == '"', "The current token is not the start of a string literal");
+	}
+	body
 	{
 		bool escapedQute;
 		auto pos = bufferPosition;

@@ -21,15 +21,10 @@ package struct CharacterLiteralScanner
 	///
 	mixin ScannerTrait;
 
-	bool isCharacterLiteral (dchar current)
-	{
-		return current == '\'';
-	}
-
 	Token scan ()
 	in
 	{
-		assert(isCharacterLiteral(current), "The current token is not the start of a character literal");
+		assert(current == '\'', "The current token is not the start of a character literal");
 	}
 	body
 	{

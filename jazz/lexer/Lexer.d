@@ -11,21 +11,27 @@ import mambo.core._;
 import jazz.lexer._;
 import jazz.lexer.scanners._;
 
-class Lexer
+final class Lexer
 {
 	private
 	{
 		Token currentToken;
 		Scanner scanner;
-		CommentScanner commentScanner;
 		CharacterLiteralScanner characterLiteralScanner;
+		CommentScanner commentScanner;
+		IdentifierScanner identifierScanner;
+		OperatorScanner operatorScanner;
+		StringLiteralScanner stringLiteralScanner;
 	}
 
 	this (string code)
 	{
 		scanner = new Scanner(code);
-		commentScanner = CommentScanner(scanner);
 		characterLiteralScanner = CharacterLiteralScanner(scanner);
+		commentScanner = CommentScanner(scanner);
+		identifierScanner = IdentifierScanner(scanner);
+		operatorScanner = OperatorScanner(scanner);
+		stringLiteralScanner = StringLiteralScanner(scanner);
 	}
 
 	Token scan ()
@@ -34,6 +40,7 @@ class Lexer
 
 		switch (currentToken.kind)
 		{
+			case TokenKind.characterLiteral: return scanCharacterLiteral();
 			case TokenKind.identifier: return scanIdentifier();
 			case TokenKind.stringLiteral: return scanStringLiteral();
 
@@ -41,10 +48,7 @@ class Lexer
 				if (commentScanner.isComment(current))
 					return scanComment();
 
-				if (characterLiteralScanner.isCharacterLiteral(current))
-					return scanCharacterLiteral();
-
-				if (OperatorScanner.isStartOfOperator(current))
+				if (operatorScanner.isOperator(current))
 					return scanOperator();
 
 				if (currentToken.lexeme is null)
@@ -100,6 +104,9 @@ private:
 					case '"':
 						return newToken(TokenKind.stringLiteral);
 
+					case '\'':
+						return newToken(TokenKind.characterLiteral);
+
 					case Entity.null_, Entity.substitute:
 						return newToken(TokenKind.eof);
 
@@ -146,24 +153,9 @@ private:
 		return scanner.buffer[pos .. pos + current.codeLength!(char)];
 	}
 
-	Token scanIdentifier ()
+	Token scanCharacterLiteral ()
 	{
-		return IdentifierScanner(scanner).scan();
-	}
-
-	Token scanStringLiteral ()
-	in
-	{
-		assert(currentToken.kind == TokenKind.stringLiteral);
-	}
-	body
-	{
-		return StringLiteralScanner(scanner).scan();
-	}
-
-	Token scanOperator ()
-	{
-		return OperatorScanner(scanner).scan();
+		return characterLiteralScanner.scan();
 	}
 
 	Token scanComment ()
@@ -171,9 +163,19 @@ private:
 		return commentScanner.scan();
 	}
 
-	Token scanCharacterLiteral ()
+	Token scanIdentifier ()
 	{
-		return characterLiteralScanner.scan();
+		return identifierScanner.scan();
+	}
+
+	Token scanOperator ()
+	{
+		return operatorScanner.scan();
+	}
+
+	Token scanStringLiteral ()
+	{
+		return stringLiteralScanner.scan();
 	}
 }
 

@@ -20,7 +20,7 @@ package struct OperatorScanner
 	///
 	mixin ScannerTrait;
 
-	static bool isStartOfOperator (dchar c)
+	bool isOperator (dchar c)
 	{
 		switch (c)
 		{
@@ -44,7 +44,7 @@ package struct OperatorScanner
 	Token scan ()
 	in
 	{
-		assert(OperatorScanner.isStartOfOperator(current), "Current position is not the start of an operator");
+		assert(isOperator(current), "Current position is not the start of an operator");
 	}
 	body
 	{
