@@ -27,15 +27,19 @@ package struct StringLiteralScanner
 		bool escapedQute;
 		auto pos = bufferPosition;
 
-		advance();
-
-		while (current != '"' || (escapedQute && current == '"'))
+		while (true)
 		{
+			if (isEof(peek))
+				return Token(TokenKind.invalid, getLexeme(pos), pos);
+
 			escapedQute = false;
 			advance();
 			skipNewline();
 
-			if (current == '\\' && peekMatches('"'))
+			if (current == '\"' && !escapedQute)
+				break;
+
+			if (current == '\\' && peekMatches('\"'))
 			{
 				advance();
 				escapedQute = true;

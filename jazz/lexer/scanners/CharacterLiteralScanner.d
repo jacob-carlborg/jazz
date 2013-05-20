@@ -39,7 +39,7 @@ package struct CharacterLiteralScanner
 		while (true)
 		{
 			if (isEof(peek))
-				return Token.invalid;
+				return Token(TokenKind.invalid, getLexeme(pos), pos);
 
 			escapedQute = false;
 			advance();

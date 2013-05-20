@@ -73,6 +73,12 @@ describe! "Lexer" in {
 				assert(lexer.line == currentLine + 1);
 			};
 		};
+
+		describe! "invalid string literal" in {
+			it! "should return an invalid token for unclosed string literal" in {
+				assertTokenKind(`"asd`, TokenKind.invalid);
+			};
+		};
 	};
 
 	describe! "valid identifier" in {
