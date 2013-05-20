@@ -8,6 +8,7 @@ module jazz.lexer.scanners._;
 
 public:
 
+import jazz.lexer.scanners.CharacterLiteralScanner;
 import jazz.lexer.scanners.CommentScanner;
 import jazz.lexer.scanners.IdentifierScanner;
 import jazz.lexer.scanners.OperatorScanner;

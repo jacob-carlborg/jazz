@@ -13,7 +13,7 @@ void main ()
 {
 	string code = "module foöbar;";
 	code = import(__FILE__);
-	code = "/+foo\n\n/+bar+/asd";
+	code = `'\''`;
 
 	auto lexer = new Lexer(code);
 	Token token;

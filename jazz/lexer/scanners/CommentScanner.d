@@ -123,15 +123,3 @@ private:
 		return TokenKind.nested;
 	}
 }
-
-private @property isEof (dchar c)
-{
-    switch (c)
-    {
-        case Entity.null_, Entity.substitute:
-            return true;
-
-        default:
-            return false;
-    }
-}

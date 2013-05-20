@@ -309,6 +309,52 @@ describe! "Lexer" in {
 			};
 		};
 	};
+
+	describe! "scan character literals" in {
+		it! "should return a token with the type TokenKind.characterLiteral" in {
+			assertTokenKind("'a'", TokenKind.characterLiteral);
+		};
+
+		it! "should return a token with the correct lexeme" in {
+			assertLexeme("'a'", "'a'");
+		};
+
+		describe! "character containing escaped quotation mark" in {
+			it! "should return a token with the type TokenKind.characterLiteral" in {
+				assertTokenKind(`'\''`, TokenKind.characterLiteral);
+			};
+
+			it! "should return a token with the correct lexeme" in {
+				assertLexeme(`'\''`, `'\''`);
+			};
+		};
+
+		describe! "character containing newline" in {
+			it! "should return a token with the type TokenKind.characterLiteral" in {
+				auto code = `'
+				'`;
+				assertTokenKind(code, TokenKind.characterLiteral);
+			};
+
+			it! "should return a token with the correct lexeme" in {
+				assertLexeme("'\n'", "'\n'");
+			};
+
+			it! "should increment the line count" in {
+				auto lexer = new Lexer("'\n'");
+				auto currentLine = lexer.line;
+				lexer.scan;
+
+				assert(lexer.line == currentLine + 1);
+			};
+		};
+
+		describe! "invalid character literal" in {
+			it! "should return an invalid token for unclosed character literal" in {
+				assertTokenKind("'", TokenKind.invalid);
+			};
+		};
+	};
 };
 
 }

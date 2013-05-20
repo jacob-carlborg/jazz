@@ -130,4 +130,16 @@ struct Scanner
 
 		return buffer[start .. bufferPosition];
 	}
+
+	@property isEof (dchar c)
+	{
+	    switch (c)
+	    {
+	        case Entity.null_, Entity.substitute:
+	            return true;
+
+	        default:
+	            return false;
+	    }
+	}
 }

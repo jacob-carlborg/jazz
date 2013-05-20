@@ -18,12 +18,14 @@ class Lexer
 		Token currentToken;
 		Scanner scanner;
 		CommentScanner commentScanner;
+		CharacterLiteralScanner characterLiteralScanner;
 	}
 
 	this (string code)
 	{
 		scanner = Scanner(code);
 		commentScanner = CommentScanner(scanner);
+		characterLiteralScanner = CharacterLiteralScanner(scanner);
 	}
 
 	Token scan ()
@@ -38,6 +40,9 @@ class Lexer
 			default:
 				if (commentScanner.isComment(current))
 					return scanComment();
+
+				if (characterLiteralScanner.isCharacterLiteral(current))
+					return scanCharacterLiteral();
 
 				if (OperatorScanner.isStartOfOperator(current))
 					return scanOperator();
@@ -164,6 +169,11 @@ private:
 	Token scanComment ()
 	{
 		return commentScanner.scan();
+	}
+
+	Token scanCharacterLiteral ()
+	{
+		return characterLiteralScanner.scan();
 	}
 }
 
