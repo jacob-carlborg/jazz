@@ -13,13 +13,17 @@ void main ()
 {
 	string code = "module foöbar;";
 	code = import(__FILE__);
-	code = `"asd`;
+	//code = "`asd`";
 
 	auto lexer = new Lexer(code);
-	Token token;
+	auto range = lexer.scanByToken();
+	range.map!(e => e.kind).println;
 
-	do {
-		token = lexer.scan();
-		println(token);
-	} while (!stop(token.kind));
+	// foreach (token ; range)
+	// 	println(token);
+
+	// do {
+	// 	token = lexer.scan();
+	// 	println(token);
+	// } while (!stop(token.kind));
 }

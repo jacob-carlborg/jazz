@@ -11,6 +11,27 @@ import mambo.core._;
 import jazz.lexer._;
 import jazz.lexer.scanners._;
 
+struct ByTokenRange
+{
+	private Lexer lexer;
+	private Token token;
+
+	Token front ()
+	{
+		return token;
+	}
+
+	void popFront ()
+	{
+		token = lexer.scan();
+	}
+
+	bool empty ()
+	{
+		return token.kind == TokenKind.eof;
+	}
+}
+
 final class Lexer
 {
 	private
@@ -32,6 +53,14 @@ final class Lexer
 		identifierScanner = IdentifierScanner(scanner);
 		operatorScanner = OperatorScanner(scanner);
 		stringLiteralScanner = StringLiteralScanner(scanner);
+	}
+
+	ByTokenRange scanByToken ()
+	{
+		auto range = ByTokenRange(this);
+		range.popFront();
+
+		return range;
 	}
 
 	Token scan ()
@@ -101,6 +130,7 @@ private:
 			with (TokenKind)
 				switch (current)
 				{
+				    case '`':
 					case '"':
 						return newToken(TokenKind.stringLiteral);
 

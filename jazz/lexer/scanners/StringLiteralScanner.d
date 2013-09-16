@@ -25,7 +25,11 @@ package struct StringLiteralScanner
 	Token scan ()
 	in
 	{
-		assert(current == '"', "The current token is not the start of a string literal");
+	    auto condition =
+			current == '"' ||
+			current == '`';
+
+		assert(condition, "The current token is not the start of a string literal");
 	}
 	body
 	{
