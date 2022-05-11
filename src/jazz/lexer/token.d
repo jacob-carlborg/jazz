@@ -18,7 +18,7 @@ immutable struct Token
     Location location;
 
     /// Represents the kind of token.
-    immutable struct Kind
+    struct Kind
     {
     private:
         ubyte value;
@@ -252,6 +252,7 @@ immutable struct Token
                 "...",
                 "$",
                 "@",
+                "#!",
                 "string",
                 "onScopeExit",
                 "onScopeFailure",
@@ -333,8 +334,9 @@ immutable struct Token
  */
 template tokenKind(string tokenText)
 {
-    enum value = Token.Kind.tokens.all.countUntil(tokenText) + 1;
-    enum tokenKind = Token.Kind(value);
+    enum value = Token.Kind.tokens.all.countUntil(tokenText);
+    static assert(value >= 0, "Invalid token: " ~ tokenText);
+    enum tokenKind = Token.Kind(value + 1);
 }
 
 ///
