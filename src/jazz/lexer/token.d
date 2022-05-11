@@ -22,7 +22,7 @@ immutable struct Token
     {
         private ubyte value;
 
-        private this(ubyte value)
+        private this(ubyte value) pure
         {
             this.value = value;
         }
