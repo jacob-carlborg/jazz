@@ -1,0 +1,12 @@
+name "jazz"
+description "Jazz D compiler"
+authors "Jacob Carlborg"
+copyright "Copyright © 2022, Jacob Carlborg"
+license "BSL-1.0"
+
+configuration "unittest" {
+  sourcePaths "tests"
+  importPaths "tests"
+
+  dependency "silly" version="~>1.1.1"
+}

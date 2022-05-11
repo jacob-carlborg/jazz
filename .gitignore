@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/jazz
+jazz.so
+jazz.dylib
+jazz.dll
+jazz.a
+jazz.lib
+jazz-test-*
+*.exe
+*.o
+*.obj
+*.lst
