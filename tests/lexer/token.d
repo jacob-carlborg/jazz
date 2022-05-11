@@ -5,11 +5,11 @@ import jazz.lexer.token;
 @("Token.Kind equality")
 unittest
 {
-    static assert(Token.kind!"+" == Token.kind!"+");
+    static assert(tokenKind!"+" == tokenKind!"+");
 }
 
 @("Token.Kind inequality")
 unittest
 {
-    static assert(Token.kind!"+" != Token.kind!"-");
+    static assert(tokenKind!"+" != tokenKind!"-");
 }
