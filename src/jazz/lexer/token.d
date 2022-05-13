@@ -319,7 +319,7 @@ immutable struct Token
                 cCharacterLiterals ~
                 otherVariable;
 
-            enum all = fixed ~ variable;
+            enum all = "invalid" ~ fixed ~ variable;
         }
 
         static assert(tokens.all.length < value.max);
@@ -336,7 +336,7 @@ template tokenKind(string tokenText)
 {
     enum value = Token.Kind.tokens.all.countUntil(tokenText);
     static assert(value >= 0, "Invalid token: " ~ tokenText);
-    enum tokenKind = Token.Kind(value + 1);
+    enum tokenKind = Token.Kind(value);
 }
 
 ///
