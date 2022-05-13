@@ -18,16 +18,9 @@ struct Lexer
         MutableToken token;
     }
 
-
-    immutable struct Offset
-    {
-        uint start;
-        uint end = uint.max;
-    }
-
 pure @nogc:
 
-    this(string sourceCode, uint offsetStart = 0) @trusted
+    this(string sourceCode) @trusted
     in
     {
         const end = sourceCode.ptr[sourceCode.length - 1];
@@ -36,7 +29,6 @@ pure @nogc:
     do
     {
         this.sourceCode = sourceCode;
-        index = offsetStart;
         token.kind = tokenKind!"endOfFile";
     }
 
