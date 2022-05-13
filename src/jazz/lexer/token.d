@@ -4,6 +4,8 @@ import std.algorithm;
 
 import jazz.lexer.location;
 
+pure nothrow @nogc @safe:
+
 /**
  * A token in the source code.
  *

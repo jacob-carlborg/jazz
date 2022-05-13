@@ -5,6 +5,8 @@ import std.stdio;
 import jazz.lexer.location;
 import jazz.lexer.token;
 
+pure nothrow @nogc:
+
 struct Lexer
 {
     private
@@ -18,7 +20,7 @@ struct Lexer
         MutableToken token;
     }
 
-pure @nogc @safe:
+pure nothrow @nogc @safe:
 
     this(ConstString sourceCode)
     in
@@ -32,8 +34,6 @@ pure @nogc @safe:
         this.sourceCode = sourceCode;
         token.kind = tokenKind!"endOfFile";
     }
-
-@safe
 
     void popFront()
     {
@@ -75,7 +75,7 @@ pure @nogc @safe:
 
 private:
 
-    bool lexShebangLine() pure
+    bool lexShebangLine()
     {
         if (peek(0, 2) != "#!")
             return false;
@@ -161,6 +161,8 @@ pure nothrow @nogc:
         this.value = value;
     }
 
+const:
+
     ConstString opSlice(size_t start, size_t end) @trusted
     {
         return value[start .. end];
@@ -172,7 +174,7 @@ pure nothrow @nogc:
     }
 }
 
-TrustedString trusted(ConstString value) pure nothrow @nogc @trusted
+TrustedString trusted(ConstString value) @trusted
 {
     return TrustedString(value.ptr);
 }
