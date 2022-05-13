@@ -344,3 +344,31 @@ unittest
 {
     auto kind = tokenKind!"+";
 }
+
+/**
+ * Returns the lexeme of the given token.
+ *
+ * The lexeme is actual text in the source code that makes up the token.
+ *
+ * Params:
+ *  self = the token to get the lexeme of
+ *  sourceCode = the source code the token originates from
+ */
+string lexeme(Token self, string sourceCode)
+{
+    return sourceCode[self.location.start .. self.location.end];
+}
+
+///
+unittest
+{
+    Token token = {
+        kind: tokenKind!"+",
+        location: {
+            start: 1,
+            end: 2
+        }
+    };
+
+    assert(token.lexeme("a+") == "+");
+}

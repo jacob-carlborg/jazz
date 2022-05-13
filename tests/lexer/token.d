@@ -13,3 +13,17 @@ unittest
 {
     static assert(tokenKind!"+" != tokenKind!"-");
 }
+
+@("Token.lexeme")
+unittest
+{
+    Token token = {
+        kind: tokenKind!"+",
+        location: {
+            start: 1,
+            end: 2
+        }
+    };
+
+    assert(token.lexeme("a+") == "+");
+}
