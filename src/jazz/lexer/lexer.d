@@ -10,7 +10,7 @@ struct Lexer
     private
     {
         // The source code to lex.
-        string sourceCode;
+        ConstString sourceCode;
 
         // The current index into `sourceCode`.
         uint index;
@@ -20,7 +20,7 @@ struct Lexer
 
 pure @nogc:
 
-    this(string sourceCode) @trusted
+    this(ConstString sourceCode) @trusted
     in
     {
         const end = sourceCode.ptr[sourceCode.length - 1];
@@ -94,6 +94,8 @@ private:
 }
 
 private:
+
+alias ConstString = const(char)[];
 
 enum Entity : dchar
 {
