@@ -20,15 +20,29 @@ immutable struct Token
     /// Represents the kind of token.
     struct Kind
     {
-    private:
-        ubyte value;
 
-        this(ubyte value) pure
+        private ubyte value;
+
+    const pure nothrow @nogc @safe:
+
+        this(ubyte value)
         {
             this.value = value;
         }
 
-        static struct tokens
+        string toString()
+        {
+            switch (value)
+            {
+                case tokenKind!"\t".value: return `\t`;
+                case tokenKind!"\n".value: return `\n`;
+                case tokenKind!"\r".value: return `\r`;
+                case tokenKind!" ".value: return `" "`;
+                default: return tokens.all[value];
+            }
+        }
+
+        private static struct tokens
         {
             enum basicTypes = [
                 "void",
@@ -319,7 +333,7 @@ immutable struct Token
                 cCharacterLiterals ~
                 otherVariable;
 
-            enum all = "invalid" ~ fixed ~ variable;
+            static immutable all = "invalid" ~ fixed ~ variable;
         }
 
         static assert(tokens.all.length < value.max);
