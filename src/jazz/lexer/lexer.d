@@ -18,13 +18,14 @@ struct Lexer
         MutableToken token;
     }
 
-pure @nogc:
+pure @nogc @safe:
 
-    this(ConstString sourceCode) @trusted
+    this(ConstString sourceCode)
     in
     {
-        const end = sourceCode.ptr[sourceCode.length - 1];
-        assert(end == Entity.null_ || end == Entity.substitute);
+        const end = sourceCode.trusted[sourceCode.length -1];
+        assert(end == Entity.null_ || end == Entity.substitute,
+            `source code needs to end with \0`);
     }
     do
     {
@@ -40,6 +41,23 @@ pure @nogc:
 
         if (lexShebangLine())
             return;
+
+        while (true)
+        {
+            switch (current)
+            {
+                case '\t':
+                    index++;
+                    if (current != '\t')
+                    {
+                        recordToken(tokenKind!"\t");
+                        return;
+                    }
+                    continue;
+
+                default: assert(false);
+            }
+        }
     }
 
     Token front()
@@ -57,16 +75,16 @@ pure @nogc:
 
 private:
 
-    bool lexShebangLine() @trusted pure
+    bool lexShebangLine() pure
     {
-        if (sourceCode.ptr[0 .. 2] != "#!")
+        if (peek(0, 2) != "#!")
             return false;
 
         index += 2;
 
         while (true)
         {
-            switch (sourceCode.ptr[index++])
+            switch (next)
             {
                 case Entity.null_:
                 case Entity.substitute:
@@ -86,11 +104,16 @@ private:
         assert(false);
     }
 
-    void recordToken(Token.Kind)
+    void recordToken(Token.Kind kind)
     {
         token.location.end = index;
-        token.kind = tokenKind!"#!";
+        token.kind = kind;
     }
+
+    auto current() => sourceCode.trusted[index];
+    auto next() => sourceCode.trusted[index++];
+    auto peek(size_t codeUnits = 1) => sourceCode.trusted[index + codeUnits];
+    auto peek(size_t start, size_t end) => sourceCode.trusted[start .. end];
 }
 
 private:
@@ -126,3 +149,30 @@ struct MutableToken
 }
 
 static assert(MutableToken.sizeof == Token.sizeof);
+
+struct TrustedString
+{
+    private const(char)* value;
+
+pure nothrow @nogc:
+
+    private this(const(char)* value)
+    {
+        this.value = value;
+    }
+
+    ConstString opSlice(size_t start, size_t end) @trusted
+    {
+        return value[start .. end];
+    }
+
+    char opIndex(size_t index) @trusted
+    {
+        return value[index];
+    }
+}
+
+TrustedString trusted(ConstString value) pure nothrow @nogc @trusted
+{
+    return TrustedString(value.ptr);
+}
