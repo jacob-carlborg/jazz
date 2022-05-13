@@ -1,6 +1,10 @@
 {
 	"fileVersion": 1,
 	"versions": {
-		"silly": "1.1.1"
+		"ddmp": "0.0.1-0.dev.3",
+		"fluent-asserts": "0.14.0-alpha.13",
+		"libdparse": "0.18.1",
+		"silly": "1.1.1",
+		"stdx-allocator": "2.77.5"
 	}
 }

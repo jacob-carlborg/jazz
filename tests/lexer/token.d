@@ -1,5 +1,7 @@
 module tests.lexer.token;
 
+import fluent.asserts;
+
 import jazz.lexer.token;
 
 @("Token.Kind equality")
@@ -25,5 +27,5 @@ unittest
         }
     };
 
-    assert(token.lexeme("a+") == "+");
+    expect(token.lexeme("a+")).to.equal("+");
 }

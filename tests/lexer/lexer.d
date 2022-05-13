@@ -1,6 +1,6 @@
 module tests.lexer.lexer;
 
-import std.conv : text;
+import fluent.asserts;
 
 import jazz.lexer.lexer;
 import jazz.lexer.token;
@@ -16,6 +16,6 @@ unittest
     auto token = lexer.front;
     auto location = token.location;
 
-    assert(token.kind == tokenKind!"#!", token.kind.text);
-    assert(code[location.start .. location.end] == "#!foo", code[location.start .. location.end]);
+    expect(token.kind).to.equal(tokenKind!"#!");
+    expect(token.lexeme(code)).to.equal("#!foo");
 }
