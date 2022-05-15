@@ -46,6 +46,12 @@ pure nothrow @nogc @safe:
         {
             switch (current)
             {
+                case '\0':
+                case Entity.substitute:
+                    recordToken(tokenKind!"endOfFile");
+                    // Intentionally not advancing `index`, such that subsequent
+                    // calls keep returning tokenKind!"endOfFile".
+                    return;
                 case '\t':
                     index++;
                     if (current != '\t')
