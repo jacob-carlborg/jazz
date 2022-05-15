@@ -32,7 +32,7 @@ pure nothrow @nogc @safe:
     do
     {
         this.sourceCode = sourceCode;
-        token.kind = tokenKind!"endOfFile";
+        token.kind = tokenKind!"invalid";
     }
 
     void popFront()
@@ -78,6 +78,8 @@ pure nothrow @nogc @safe:
 
         return result;
     }
+
+    bool empty() const => token.kind == tokenKind!"endOfFile";
 
 private:
 

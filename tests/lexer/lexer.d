@@ -67,6 +67,22 @@ unittest
     expect(token.lexeme(code)).to.equal("\t\t\t\t");
 }
 
+@("range interface")
+unittest
+{
+    enum code = "\t\0";
+    auto lexer = Lexer(code);
+    lexer.popFront;
+
+    Token[] tokens;
+
+    foreach (Token token; lexer)
+        tokens ~= token;
+
+    expect(tokens.length).to.equal(1);
+    expect(tokens[0].kind).to.equal(tokenKind!"\t");
+}
+
 private:
 
 Token lexFirstToken(string sourceCode)
