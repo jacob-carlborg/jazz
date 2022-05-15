@@ -67,6 +67,25 @@ unittest
     expect(token.lexeme(code)).to.equal("\t\t\t\t");
 }
 
+@(`lex " " - space`)
+unittest
+{
+    enum code = " \0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!" ");
+}
+
+@(`lex multiple consecutive " "`)
+unittest
+{
+    enum code = "    \0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!" ");
+    expect(token.lexeme(code)).to.equal("    ");
+}
+
 @("range interface")
 unittest
 {

@@ -52,6 +52,14 @@ pure nothrow @nogc @safe:
                     // Intentionally not advancing `index`, such that subsequent
                     // calls keep returning tokenKind!"endOfFile".
                     return;
+
+                case ' ':
+                    index++;
+                    if (current == ' ')
+                        continue;
+                    recordToken(tokenKind!" ");
+                    return;
+
                 case '\t':
                     index++;
                     if (current != '\t')
