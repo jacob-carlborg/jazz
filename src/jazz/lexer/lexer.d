@@ -74,7 +74,7 @@ pure nothrow @nogc @safe:
         }
     }
 
-    Token front()
+    Token front() const
     {
         Token result = {
             kind: token.kind,
@@ -126,10 +126,10 @@ private:
         token.kind = kind;
     }
 
-    auto current() => sourceCode.trusted[index];
+    auto current() const => sourceCode.trusted[index];
     auto next() => sourceCode.trusted[index++];
-    auto peek(size_t codeUnits = 1) => sourceCode.trusted[index + codeUnits];
-    auto peek(size_t start, size_t end) => sourceCode.trusted[start .. end];
+    auto peek(size_t codeUnits = 1) const => sourceCode.trusted[index + codeUnits];
+    auto peek(size_t start, size_t end) const => sourceCode.trusted[start .. end];
 }
 
 private:
