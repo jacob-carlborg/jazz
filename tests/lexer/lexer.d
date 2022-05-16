@@ -123,6 +123,25 @@ unittest
     expect(token.lexeme(code)).to.equal("\v\v\v\v");
 }
 
+@(`lex \f`)
+unittest
+{
+    enum code = "\f\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\f");
+}
+
+@(`lex multiple consecutive \f`)
+unittest
+{
+    enum code = "\f\f\f\f\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\f");
+    expect(token.lexeme(code)).to.equal("\f\f\f\f");
+}
+
 private:
 
 Token lexFirstToken(string sourceCode)

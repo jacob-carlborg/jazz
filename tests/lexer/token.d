@@ -34,6 +34,12 @@ unittest
     expect(tokenKind!"\v".toString).to.equal(`\v`);
 }
 
+@(`Token.Kind.toString \f`)
+unittest
+{
+    expect(tokenKind!"\f".toString).to.equal(`\f`);
+}
+
 @(`Token.Kind.toString \n`)
 unittest
 {

@@ -38,6 +38,7 @@ immutable struct Token
             {
                 case tokenKind!"\t".value: return `\t`;
                 case tokenKind!"\v".value: return `\v`;
+                case tokenKind!"\f".value: return `\f`;
                 case tokenKind!"\n".value: return `\n`;
                 case tokenKind!"\r".value: return `\r`;
                 case tokenKind!" ".value: return `" "`;
@@ -280,6 +281,7 @@ immutable struct Token
                 " ",
                 "\t",
                 "\v",
+                "\f",
                 "lineSeparator", // \u2028,
                 "paragraphSeparator", // \u2029
                 "endOfFile",

@@ -73,6 +73,15 @@ pure nothrow @nogc @safe:
                     }
                     continue;
 
+                case '\f':
+                    index++;
+                    if (current != '\f')
+                    {
+                        recordToken(tokenKind!"\f");
+                        return;
+                    }
+                    continue;
+
                 default: assert(false);
             }
         }
