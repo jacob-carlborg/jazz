@@ -53,12 +53,7 @@ pure nothrow @nogc @safe:
                     // calls keep returning tokenKind!"endOfFile".
                     return;
 
-                case ' ':
-                    index++;
-                    if (current == ' ')
-                        continue;
-                    recordToken(tokenKind!" ");
-                    return;
+                case ' ': return lexSpaces();
 
                 case '\t':
                     index++;
@@ -118,6 +113,28 @@ private:
         }
 
         assert(false);
+    }
+
+    void lexSpaces() @trusted
+    in(current == ' ')
+    {
+        // Skip 4 spaces at a time after aligning 'p' to a 4-byte boundary.
+        while ((cast(size_t) sourceCode.ptr + index) % uint.sizeof)
+        {
+            if (current != ' ')
+                return recordToken(tokenKind!" ");
+
+            index++;
+        }
+
+        while (*(cast(uint*) sourceCode.ptr + index) == 0x20202020) // ' ' == 0x20
+            index += 4;
+
+        // Skip over any remaining space on the line.
+        while (current == ' ')
+            index++;
+
+        recordToken(tokenKind!" ");
     }
 
     void recordToken(Token.Kind kind)

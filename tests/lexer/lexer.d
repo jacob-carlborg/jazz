@@ -81,11 +81,11 @@ unittest
 @(`lex multiple consecutive " "`)
 unittest
 {
-    enum code = "    \0\0\0\0";
+    enum code = "         \0\0\0\0";
     auto token = code.lexFirstToken;
 
     expect(token.kind).to.equal(tokenKind!" ");
-    expect(token.lexeme(code)).to.equal("    ");
+    expect(token.lexeme(code)).to.equal("         ");
 }
 
 @("range interface")
