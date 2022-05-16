@@ -37,6 +37,7 @@ immutable struct Token
             switch (value)
             {
                 case tokenKind!"\t".value: return `\t`;
+                case tokenKind!"\v".value: return `\v`;
                 case tokenKind!"\n".value: return `\n`;
                 case tokenKind!"\r".value: return `\r`;
                 case tokenKind!" ".value: return `" "`;
@@ -278,6 +279,7 @@ immutable struct Token
                 "\r",
                 " ",
                 "\t",
+                "\v",
                 "lineSeparator", // \u2028,
                 "paragraphSeparator", // \u2029
                 "endOfFile",
@@ -352,7 +354,7 @@ template tokenKind(string tokenText)
 {
     enum value = Token.Kind.tokens.all.countUntil(tokenText);
     static assert(value >= 0, "Invalid token: " ~ tokenText);
-    enum tokenKind = Token.Kind(value);
+    enum tokenKind = Token.Kind(cast(ubyte) value);
 }
 
 ///
