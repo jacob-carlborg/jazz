@@ -18,6 +18,22 @@ unittest
     expect(token.lexeme(code)).to.equal("#!foo");
 }
 
+@("range interface")
+unittest
+{
+    enum code = "\t\0\0\0\0";
+    auto lexer = Lexer(code);
+    lexer.popFront;
+
+    Token[] tokens;
+
+    foreach (Token token; lexer)
+        tokens ~= token;
+
+    expect(tokens.length).to.equal(1);
+    expect(tokens[0].kind).to.equal(tokenKind!"\t");
+}
+
 @(`lex \0`)
 unittest
 {
@@ -86,22 +102,6 @@ unittest
 
     expect(token.kind).to.equal(tokenKind!" ");
     expect(token.lexeme(code)).to.equal("         ");
-}
-
-@("range interface")
-unittest
-{
-    enum code = "\t\0\0\0\0";
-    auto lexer = Lexer(code);
-    lexer.popFront;
-
-    Token[] tokens;
-
-    foreach (Token token; lexer)
-        tokens ~= token;
-
-    expect(tokens.length).to.equal(1);
-    expect(tokens[0].kind).to.equal(tokenKind!"\t");
 }
 
 @(`lex \v`)
