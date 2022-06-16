@@ -39,8 +39,9 @@ immutable struct Token
                 case tokenKind!"\t".value: return `\t`;
                 case tokenKind!"\v".value: return `\v`;
                 case tokenKind!"\f".value: return `\f`;
-                case tokenKind!"\n".value: return `\n`;
                 case tokenKind!"\r".value: return `\r`;
+                case tokenKind!"\r\n".value: return `\r\n`;
+                case tokenKind!"\n".value: return `\n`;
                 case tokenKind!" ".value: return `" "`;
                 default: return tokens.all[value];
             }
@@ -276,12 +277,13 @@ immutable struct Token
                 "onScopeFailure",
                 "onScopeSuccess",
 
-                "\n",
-                "\r",
                 " ",
                 "\t",
                 "\v",
                 "\f",
+                "\r",
+                "\r\n",
+                "\n",
                 "lineSeparator", // \u2028,
                 "paragraphSeparator", // \u2029
                 "endOfFile",

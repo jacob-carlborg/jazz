@@ -40,16 +40,22 @@ unittest
     expect(tokenKind!"\f".toString).to.equal(`\f`);
 }
 
-@(`Token.Kind.toString \n`)
-unittest
-{
-    expect(tokenKind!"\n".toString).to.equal(`\n`);
-}
-
 @(`Token.Kind.toString \r`)
 unittest
 {
     expect(tokenKind!"\r".toString).to.equal(`\r`);
+}
+
+@(`Token.Kind.toString \r\n`)
+unittest
+{
+    expect(tokenKind!"\r\n".toString).to.equal(`\r\n`);
+}
+
+@(`Token.Kind.toString \n`)
+unittest
+{
+    expect(tokenKind!"\n".toString).to.equal(`\n`);
 }
 
 @(`Token.Kind.toString " "`)

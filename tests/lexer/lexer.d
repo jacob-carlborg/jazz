@@ -142,6 +142,96 @@ unittest
     expect(token.lexeme(code)).to.equal("\f\f\f\f");
 }
 
+@(`lex \r`)
+unittest
+{
+    enum code = "\r\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\r");
+}
+
+@(`lex multiple consecutive \r`)
+unittest
+{
+    enum code = "\r\r\r\r\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\r");
+    expect(token.lexeme(code)).to.equal("\r\r\r\r");
+}
+
+@(`lex \r\n`)
+unittest
+{
+    enum code = "\r\n\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\r\n");
+    expect(token.lexeme(code)).to.equal("\r\n");
+}
+
+@(`lex multiple consecutive \r\n`)
+unittest
+{
+    enum code = "\r\n\r\n\r\n\r\n\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\r\n");
+    expect(token.lexeme(code)).to.equal("\r\n\r\n\r\n\r\n");
+}
+
+@(`lex \r\n followed by \r`)
+unittest
+{
+    enum code = "\r\n\r\0\0\0\0";
+    auto lexer = Lexer(code);
+    lexer.popFront;
+
+    Token.Kind[] result;
+
+    import std.stdio;
+
+    foreach (token; lexer)
+        result ~= token.kind;
+
+    expect(result).to.equal([tokenKind!"\r\n", tokenKind!"\r"]);
+}
+
+@(`lex \r\r followed by \n`)
+unittest
+{
+    enum code = "\r\r\n\0\0\0\0";
+    auto lexer = Lexer(code);
+    lexer.popFront;
+
+    Token.Kind[] result;
+
+    foreach (token; lexer)
+        result ~= token.kind;
+
+    expect(result).to.equal([tokenKind!"\r", tokenKind!"\n"]);
+}
+
+@(`lex \n`)
+unittest
+{
+    enum code = "\n\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\n");
+}
+
+@(`lex multiple consecutive \n`)
+unittest
+{
+    enum code = "\n\n\n\n\0\0\0\0";
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"\n");
+    expect(token.lexeme(code)).to.equal("\n\n\n\n");
+}
+
 private:
 
 Token lexFirstToken(string sourceCode)

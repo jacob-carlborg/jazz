@@ -82,6 +82,59 @@ pure nothrow @nogc @safe:
                     }
                     continue;
 
+                case '\r':
+                {
+                    if (peek != '\r' && peek != '\n')
+                    {
+                        index++;
+                        return recordToken(tokenKind!"\r");
+                    }
+
+                    while (true)
+                    {
+                        switch (current)
+                        {
+                            case '\r':
+                            {
+                                index++;
+
+                                switch (current)
+                                {
+                                    case '\n': continue;
+                                    case '\r':
+                                        if (peek != '\r')
+                                        {
+                                            index++;
+                                            return recordToken(tokenKind!"\r");
+                                        }
+
+                                        continue;
+
+                                    default: return recordToken(tokenKind!"\r");
+                                }
+                            }
+
+                            case '\n':
+                                index++;
+                                if (peek == '\n' || current == '\n')
+                                    continue;
+
+                                return recordToken(tokenKind!"\r\n");
+
+                            default: assert(false);
+                        }
+                    }
+                }
+
+                case '\n':
+                    index++;
+                    if (current != '\n')
+                    {
+                        recordToken(tokenKind!"\n");
+                        return;
+                    }
+                    continue;
+
                 default: assert(false);
             }
         }
@@ -163,8 +216,18 @@ private:
 
     auto current() const => sourceCode.trusted[index];
     auto next() => sourceCode.trusted[index++];
-    auto peek(size_t codeUnits = 1) const => sourceCode.trusted[index + codeUnits];
-    auto peek(size_t start, size_t end) const => sourceCode.trusted[start .. end];
+
+    auto peek(size_t codeUnits = 1) const
+    in(codeUnits <= 4)
+    {
+        return sourceCode.trusted[index + codeUnits];
+    }
+
+    auto peek(size_t start, size_t end) const
+    in(end > start && end <= 4)
+    {
+        return sourceCode.trusted[start .. end];
+    }
 }
 
 private:
