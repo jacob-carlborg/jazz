@@ -42,7 +42,7 @@ pure nothrow @nogc @safe:
         if (lexShebangLine())
             return;
 
-        while (true)
+        mainLoop: while (true)
         {
             switch (current)
             {
@@ -55,32 +55,17 @@ pure nothrow @nogc @safe:
 
                 case ' ': return lexSpaces();
 
-                case '\t':
-                    index++;
-                    if (current != '\t')
-                    {
-                        recordToken(tokenKind!"\t");
-                        return;
-                    }
-                    continue;
-
-                case '\v':
-                    index++;
-                    if (current != '\v')
-                    {
-                        recordToken(tokenKind!"\v");
-                        return;
-                    }
-                    continue;
-
-                case '\f':
-                    index++;
-                    if (current != '\f')
-                    {
-                        recordToken(tokenKind!"\f");
-                        return;
-                    }
-                    continue;
+                static foreach (token; ['\t', '\v', '\f', '\n'])
+                {
+                    case token:
+                        index++;
+                        if (current != token)
+                        {
+                            recordToken(tokenKind!([token]));
+                            return;
+                        }
+                        continue mainLoop;
+                }
 
                 case '\r':
                 {
@@ -125,15 +110,6 @@ pure nothrow @nogc @safe:
                         }
                     }
                 }
-
-                case '\n':
-                    index++;
-                    if (current != '\n')
-                    {
-                        recordToken(tokenKind!"\n");
-                        return;
-                    }
-                    continue;
 
                 default: assert(false);
             }
