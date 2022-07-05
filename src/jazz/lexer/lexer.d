@@ -5,6 +5,8 @@ import std.stdio;
 import jazz.lexer.location;
 import jazz.lexer.token;
 
+debug extern (C) private int printf(in char*, ...) nothrow @nogc;
+
 pure nothrow @nogc:
 
 struct Lexer
@@ -111,7 +113,9 @@ pure nothrow @nogc @safe:
                     }
                 }
 
-                default: assert(false);
+                default:
+                    debug printf("Missing case for: %c\n", current);
+                    assert(false);
             }
         }
     }
