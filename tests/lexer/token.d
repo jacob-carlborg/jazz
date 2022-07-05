@@ -64,6 +64,12 @@ unittest
     expect(tokenKind!" ".toString).to.equal(`" "`);
 }
 
+@(`Token.Kind.toString 0`)
+unittest
+{
+    expect(tokenKind!"0".toString).to.equal("0");
+}
+
 @("Token.lexeme")
 unittest
 {

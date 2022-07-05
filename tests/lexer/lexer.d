@@ -232,6 +232,15 @@ unittest
     expect(token.lexeme(code)).to.equal("\n\n\n\n");
 }
 
+@("lex 0")
+unittest
+{
+    enum code = "0".dcode;
+    auto token = code.lexFirstToken;
+
+    expect(token.kind).to.equal(tokenKind!"0");
+}
+
 private:
 
 Token lexFirstToken(string sourceCode)

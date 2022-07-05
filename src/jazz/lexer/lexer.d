@@ -2,6 +2,7 @@ module jazz.lexer.lexer;
 
 import std.stdio;
 
+import jazz.lexer.character_map;
 import jazz.lexer.location;
 import jazz.lexer.token;
 
@@ -113,6 +114,13 @@ pure nothrow @nogc @safe:
                     }
                 }
 
+                case '0':
+                    if (!peek.isZeroSecond)
+                    {
+                        index++;
+                        return recordToken(tokenKind!"0");
+                    }
+                break;
                 default:
                     debug printf("Missing case for: %c\n", current);
                     assert(false);

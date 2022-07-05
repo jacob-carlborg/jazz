@@ -301,6 +301,7 @@ immutable struct Token
             ];
 
             enum numericLiterals = [
+                "0",
                 "intLiteral",
                 "uintLiteral",
                 "longLiteral",
@@ -312,7 +313,7 @@ immutable struct Token
                 "realLiteral",
                 "ifloatLiteral",
                 "idoubleLiteral",
-                "irealLiteral",
+                "irealLiteral"
             ];
 
             enum characterLiterals = [
