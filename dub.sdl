@@ -7,7 +7,9 @@ license "BSL-1.0"
 configuration "unittest" {
   sourcePaths "tests"
   importPaths "tests"
-  dflags "-preview=shortenedMethods"
+  dflags \
+    "-preview=shortenedMethods" \
+    "-preview=dip1000"
 
   dependency "silly" version="~>1.1.1"
   dependency "fluent-asserts" version="~>0.14.0-alpha.13"
