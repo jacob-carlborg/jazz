@@ -10,7 +10,15 @@ debug extern (C) private int printf(in char*, ...) nothrow @nogc;
 
 pure nothrow @nogc:
 
-struct Lexer
+interface Language
+{
+    static immutable Language d = new DLanguage;
+    static immutable Language c = new CLanguage;
+}
+
+alias Lexer = GenericLexer!(Language.d);
+
+struct GenericLexer(alias immutable Language language)
 {
     private
     {
@@ -20,6 +28,7 @@ struct Lexer
         // The current index into `sourceCode`.
         uint index;
 
+        // The last lexed token.
         MutableToken token;
     }
 
@@ -279,4 +288,14 @@ const:
 TrustedString trusted(ConstString value) @trusted
 {
     return TrustedString(value.ptr);
+}
+
+class DLanguage : Language
+{
+
+}
+
+class CLanguage : Language
+{
+
 }
