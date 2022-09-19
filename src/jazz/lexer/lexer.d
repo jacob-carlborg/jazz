@@ -129,7 +129,17 @@ pure nothrow @nogc @safe:
                         index++;
                         return recordToken(tokenKind!"0");
                     }
-                break;
+                    goto number;
+
+                case '1': .. case '9':
+                    if (!peek.isDigitSecond)
+                    {
+                        index++;
+                        return recordToken(tokenKind!"intLiteral");
+                    }
+                number:
+                    assert(false);
+
                 default:
                     debug printf("Missing case for: %c\n", current);
                     assert(false);

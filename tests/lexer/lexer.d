@@ -241,6 +241,18 @@ unittest
     expect(token.kind).to.equal(tokenKind!"0");
 }
 
+static foreach (i; 1 .. 9 + 1)
+{
+    @("lex " ~ i.toString)
+    unittest
+    {
+        enum code = i.toString.dcode;
+        auto token = code.lexFirstToken;
+
+        expect(token.kind).to.equal(tokenKind!"intLiteral");
+    }
+}
+
 private:
 
 Token lexFirstToken(string sourceCode)
@@ -249,4 +261,18 @@ Token lexFirstToken(string sourceCode)
     lexer.popFront();
 
     return lexer.front;
+}
+
+string toString(int i)
+{
+    string result;
+    result.reserve(128);
+
+    while (i != 0)
+    {
+        result ~= (i % 10) + '0';
+        i /= 10;
+    }
+
+    return result;
 }
