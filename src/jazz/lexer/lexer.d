@@ -10,15 +10,15 @@ debug extern (C) private int printf(in char*, ...) nothrow @nogc;
 
 pure nothrow @nogc:
 
-interface Language
+immutable struct Language
 {
-    static immutable Language d = new DLanguage;
-    static immutable Language c = new CLanguage;
+    static Language d = dLanguage;
+    static Language c = cLanguage;
 }
 
 alias Lexer = GenericLexer!(Language.d);
 
-struct GenericLexer(alias immutable Language language)
+struct GenericLexer(Language language)
 {
     private
     {
@@ -300,12 +300,5 @@ TrustedString trusted(ConstString value) @trusted
     return TrustedString(value.ptr);
 }
 
-class DLanguage : Language
-{
-
-}
-
-class CLanguage : Language
-{
-
-}
+enum dLanguage = Language();
+enum cLanguage = Language();
